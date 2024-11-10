@@ -2,14 +2,7 @@
   <div>
     <div id="page-wrap">
       <h1>Shopping Cart</h1>
-      <div class="product-container" v-for="item in cartItems" :key="item.id">
-        <img :src="item.imageUrl" alt="Product Image" class="product-image" />
-        <div class="details-wrap">
-          <h3>{{ item.name }}</h3>
-          <p>Rp.{{ item.price }}</p>
-        </div>
-        <button class="remove-button">Remove</button>
-      </div>
+      <ItemCart v-for="item in cartItems" :key="item.id" :item="item" />
       <h3 id="total-price">Total: Rp.{{ totalPrice }}</h3>
       <button id="checkout-button">Checkout</button>
     </div>
@@ -17,9 +10,12 @@
 </template>
 
 <script>
-import { cartItems } from '../../data-seed'
-
+import { cartItems } from '@/data-seed'
+import ItemCart from '@/components/ItemCart.vue'
 export default {
+  components: {
+    ItemCart,
+  },
   data() {
     return {
       cartItems,
@@ -51,54 +47,6 @@ h1 {
   padding-bottom: 10px;
   margin-bottom: 20px;
   text-align: center;
-}
-
-.product-container {
-  display: flex;
-  align-items: center;
-  padding: 16px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.product-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  background-color: #f0f0f0;
-  object-fit: cover;
-  margin-right: 16px;
-}
-
-.details-wrap {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.details-wrap h3 {
-  font-size: 1.2em;
-  color: #333;
-  margin: 0;
-}
-
-.details-wrap p {
-  color: #41b883;
-  font-size: 1em;
-  margin: 0;
-}
-
-.remove-button {
-  background-color: transparent;
-  color: #e63946;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: color 0.3s ease;
-}
-
-.remove-button:hover {
-  color: #c92a2a;
 }
 
 #total-price {
