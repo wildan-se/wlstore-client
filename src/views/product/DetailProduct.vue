@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div id="page-wrap" v-if="product">
       <div id="img-wrap">
         <img :src="product.imageUrl" alt="Product Image" />
@@ -45,6 +45,11 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 #page-wrap {
   display: flex;
   flex-direction: row;

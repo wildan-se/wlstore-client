@@ -1,535 +1,298 @@
+<!-- NotFound.vue -->
 <template>
-  <div class="container">
-    <div class="main_wrapper">
-      <div class="main">
-        <div class="antenna">
-          <div class="antenna_shadow"></div>
-          <div class="a1"></div>
-          <div class="a1d"></div>
-          <div class="a2"></div>
-          <div class="a2d"></div>
-          <div class="a_base"></div>
-        </div>
-        <div class="tv">
-          <div class="cruve">
-            <svg
-              xml:space="preserve"
-              viewBox="0 0 189.929 189.929"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              xmlns="http://www.w3.org/2000/svg"
-              version="1.1"
-              class="curve_svg"
-            >
-              <path
-                d="M70.343,70.343c-30.554,30.553-44.806,72.7-39.102,115.635l-29.738,3.951C-5.442,137.659,11.917,86.34,49.129,49.13
-        C86.34,11.918,137.664-5.445,189.928,1.502l-3.95,29.738C143.041,25.54,100.895,39.789,70.343,70.343z"
-              ></path>
-            </svg>
+  <div class="error-page">
+    <div class="container">
+      <div
+        class="card-wrapper"
+        @mousemove="handleMouseMove"
+        @mouseleave="handleMouseLeave"
+      >
+        <div class="card" :style="cardStyle">
+          <div class="card-front">
+            <div class="error-code" :class="{ glitch: startGlitch }">404</div>
+            <div class="message" v-show="showMessage">
+              Oops! Halaman yang Anda cari tidak ditemukan.
+            </div>
+            <router-link to="/" class="home-btn" v-show="showButton">
+              Kembali ke Beranda
+            </router-link>
           </div>
-          <div class="display_div">
-            <div class="screen_out">
-              <div class="screen_out1">
-                <div class="screen">
-                  <span class="notfound_text"> NOT FOUND</span>
-                </div>
+          <div class="card-back">
+            <div class="back-content">
+              <div class="error-icon">❌</div>
+              <div class="back-message">Page Not Found</div>
+              <div class="back-details">
+                The page you're looking for might have been removed, had its
+                name changed, or is temporarily unavailable.
               </div>
             </div>
           </div>
-          <div class="lines">
-            <div class="line1"></div>
-            <div class="line2"></div>
-            <div class="line3"></div>
-          </div>
-          <div class="buttons_div">
-            <div class="b1"><div></div></div>
-            <div class="b2"></div>
-            <div class="speakers">
-              <div class="g1">
-                <div class="g11"></div>
-                <div class="g12"></div>
-                <div class="g13"></div>
-              </div>
-              <div class="g"></div>
-              <div class="g"></div>
-            </div>
-          </div>
         </div>
-        <div class="bottom">
-          <div class="base1"></div>
-          <div class="base2"></div>
-          <div class="base3"></div>
-        </div>
-      </div>
-      <div class="text_404">
-        <div class="text_4041">4</div>
-        <div class="text_4042">0</div>
-        <div class="text_4043">4</div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
-export default {}
-</script>
-<style scoped>
-.container {
-  display: flex;
-  justify-content: center;
-  height: 100vh;
+export default {
+  name: 'NotFound',
+  data() {
+    return {
+      showMessage: false,
+      showButton: false,
+      startGlitch: false,
+      rotateX: 0,
+      rotateY: 0,
+      isAutoRotating: true,
+    }
+  },
+  computed: {
+    cardStyle() {
+      return {
+        transform: `
+          rotateX(${this.rotateX}deg) 
+          rotateY(${this.rotateY}deg)
+        `,
+      }
+    },
+  },
+  mounted() {
+    setTimeout(() => {
+      this.startGlitch = true
+    }, 300)
+    setTimeout(() => {
+      this.showMessage = true
+    }, 800)
+    setTimeout(() => {
+      this.showButton = true
+    }, 1300)
+    this.startAutoRotation()
+  },
+  beforeUnmount() {
+    this.stopAutoRotation()
+  },
+  methods: {
+    handleMouseMove(e) {
+      this.isAutoRotating = false
+      const card = e.currentTarget
+      const rect = card.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 30
+      const rotateX = -((e.clientY - centerY) / (rect.height / 2)) * 30
+
+      this.rotateX = rotateX
+      this.rotateY = rotateY
+    },
+    handleMouseLeave() {
+      this.isAutoRotating = true
+      this.startAutoRotation()
+    },
+    startAutoRotation() {
+      let angle = 0
+      const animate = () => {
+        if (!this.isAutoRotating) return
+        angle = (angle + 0.5) % 360
+        this.rotateY = Math.sin((angle * Math.PI) / 180) * 15
+        this.rotateX = Math.cos((angle * Math.PI) / 180) * 15
+        this.animationFrame = requestAnimationFrame(animate)
+      }
+      this.animationFrame = requestAnimationFrame(animate)
+    },
+    stopAutoRotation() {
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame)
+      }
+    },
+  },
 }
-.main_wrapper {
+</script>
+
+<style scoped>
+.error-page {
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30em;
-  height: 30em;
+  font-family: 'Arial', sans-serif;
+  perspective: 1000px;
 }
 
-.main {
+.container {
+  padding: 2rem;
+  position: relative;
+}
+
+.card-wrapper {
+  width: 400px;
+  height: 500px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.card-front,
+.card-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 5em;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.antenna {
-  width: 5em;
-  height: 5em;
-  border-radius: 50%;
-  border: 2px solid black;
-  background-color: #f27405;
-  margin-bottom: -6em;
-  margin-left: 0em;
-  z-index: -1;
-}
-.antenna_shadow {
-  position: absolute;
-  background-color: transparent;
-  width: 50px;
-  height: 56px;
-  margin-left: 1.68em;
-  border-radius: 45%;
-  transform: rotate(140deg);
-  border: 4px solid transparent;
-  box-shadow:
-    inset 0px 16px #a85103,
-    inset 0px 16px 1px 1px #a85103;
-  -moz-box-shadow:
-    inset 0px 16px #a85103,
-    inset 0px 16px 1px 1px #a85103;
-}
-.antenna::after {
-  content: '';
-  position: absolute;
-  margin-top: -9.4em;
-  margin-left: 0.4em;
-  transform: rotate(-25deg);
-  width: 1em;
-  height: 0.5em;
-  border-radius: 50%;
-  background-color: #f69e50;
-}
-.antenna::before {
-  content: '';
-  position: absolute;
-  margin-top: 0.2em;
-  margin-left: 1.25em;
-  transform: rotate(-20deg);
-  width: 1.5em;
-  height: 0.8em;
-  border-radius: 50%;
-  background-color: #f69e50;
-}
-.a1 {
-  position: relative;
-  top: -102%;
-  left: -130%;
-  width: 12em;
-  height: 5.5em;
-  border-radius: 50px;
-  background-image: linear-gradient(
-    #171717,
-    #171717,
-    #353535,
-    #353535,
-    #171717
-  );
-  transform: rotate(-29deg);
-  clip-path: polygon(50% 0%, 49% 100%, 52% 100%);
-}
-.a1d {
-  position: relative;
-  top: -211%;
-  left: -35%;
-  transform: rotate(45deg);
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  border: 2px solid black;
-  background-color: #979797;
-  z-index: 99;
-}
-.a2 {
-  position: relative;
-  top: -210%;
-  left: -10%;
-  width: 12em;
-  height: 4em;
-  border-radius: 50px;
-  background-color: #171717;
-  background-image: linear-gradient(
-    #171717,
-    #171717,
-    #353535,
-    #353535,
-    #171717
-  );
-  margin-right: 5em;
-  clip-path: polygon(
-    47% 0,
-    47% 0,
-    34% 34%,
-    54% 25%,
-    32% 100%,
-    29% 96%,
-    49% 32%,
-    30% 38%
-  );
-  transform: rotate(-8deg);
-}
-.a2d {
-  position: relative;
-  top: -294%;
-  left: 94%;
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  border: 2px solid black;
-  background-color: #979797;
-  z-index: 99;
+.card-back {
+  transform: rotateY(180deg);
+  background: rgba(255, 255, 255, 0.15);
 }
 
-.notfound_text {
-  background-color: black;
-  padding-left: 0.3em;
-  padding-right: 0.3em;
-  font-size: 0.75em;
-  color: white;
-  letter-spacing: 0;
-  border-radius: 5px;
-  z-index: 10;
-}
-.tv {
-  width: 17em;
-  height: 9em;
-  margin-top: 3em;
-  border-radius: 15px;
-  background-color: #d36604;
-  display: flex;
-  justify-content: center;
-  border: 2px solid #1d0e01;
-  box-shadow: inset 0.2em 0.2em #e69635;
-}
-.tv::after {
-  content: '';
-  position: absolute;
-  width: 17em;
-  height: 9em;
-  border-radius: 15px;
-  background:
-    repeating-radial-gradient(#d36604 0 0.0001%, #00000070 0 0.0002%) 50% 0/2500px
-      2500px,
-    repeating-conic-gradient(#d36604 0 0.0001%, #00000070 0 0.0002%) 60% 60%/2500px
-      2500px;
-  background-blend-mode: difference;
-  opacity: 0.09;
-}
-.curve_svg {
-  position: absolute;
-  margin-top: 0.25em;
-  margin-left: -0.25em;
-  height: 12px;
-  width: 12px;
-}
-.display_div {
-  display: flex;
-  align-items: center;
-  align-self: center;
-  justify-content: center;
-  border-radius: 15px;
-  box-shadow: 3.5px 3.5px 0px #e69635;
-}
-.screen_out {
-  width: auto;
-  height: auto;
-
-  border-radius: 10px;
-}
-.screen_out1 {
-  width: 11em;
-  height: 7.75em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-}
-.screen {
-  width: 13em;
-  height: 7.85em;
-  font-family: Montserrat;
-  border: 2px solid #1d0e01;
-  background:
-    repeating-radial-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 50% 0/2500px
-      2500px,
-    repeating-conic-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 60% 60%/2500px
-      2500px;
-  background-blend-mode: difference;
-  animation: b 0.2s infinite alternate;
-  border-radius: 10px;
-  z-index: 99;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.error-code {
+  font-size: 120px;
   font-weight: bold;
-  color: #252525;
-  letter-spacing: 0.15em;
-  text-align: center;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.5s,
+    transform 0.5s;
 }
-@keyframes b {
+
+.error-code.glitch {
+  opacity: 1;
+  transform: scale(1);
+  animation: glitch 5s infinite;
+}
+
+.message {
+  font-size: 24px;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 30px;
+  animation: fadeInUp 1s ease-out;
+}
+
+.home-btn {
+  padding: 12px 30px;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+  text-decoration: none;
+  animation: fadeInUp 1s ease-out;
+}
+
+.home-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.back-content {
+  text-align: center;
+  color: #fff;
+}
+
+.error-icon {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.back-message {
+  font-size: 28px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.back-details {
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@keyframes glitch {
+  0% {
+    transform: translateX(0) scale(1);
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    transform: translateX(-5px) scale(1.02) skew(10deg);
+    filter: hue-rotate(90deg);
+  }
+  50% {
+    transform: translateX(5px) scale(0.98) skew(-10deg);
+    filter: hue-rotate(180deg);
+  }
+  75% {
+    transform: translateX(-3px) scale(1.01) skew(5deg);
+    filter: hue-rotate(270deg);
+  }
   100% {
-    background-position:
-      50% 0,
-      60% 50%;
+    transform: translateX(0) scale(1);
+    filter: hue-rotate(360deg);
   }
 }
 
-/* Another Error Screen to Use 
-
-.screen {
-  width: 13em;
-  height: 7.85em;
-  position: relative;
-  background: linear-gradient(to right, #002fc6 0%, #002bb2 14.2857142857%, #3a3a3a 14.2857142857%, #303030 28.5714285714%, #ff0afe 28.5714285714%, #f500f4 42.8571428571%, #6c6c6c 42.8571428571%, #626262 57.1428571429%, #0affd9 57.1428571429%, #00f5ce 71.4285714286%, #3a3a3a 71.4285714286%, #303030 85.7142857143%, white 85.7142857143%, #fafafa 100%);
-  border-radius: 10px;
-  border: 2px solid black;
-  z-index: 99;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #252525;
-  letter-spacing: 0.15em;
-  text-align: center;
-  overflow: hidden;
-}
-.screen:before, .screen:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  z-index: 1;
-  width: 100%;
-}
-.screen:before {
-  top: 0;
-  height: 68.4782608696%;
-  background: linear-gradient(to right, white 0%, #fafafa 14.2857142857%, #ffe60a 14.2857142857%, #f5dc00 28.5714285714%, #0affd9 28.5714285714%, #00f5ce 42.8571428571%, #10ea00 42.8571428571%, #0ed600 57.1428571429%, #ff0afe 57.1428571429%, #f500f4 71.4285714286%, #ed0014 71.4285714286%, #d90012 85.7142857143%, #002fc6 85.7142857143%, #002bb2 100%);
-}
-.screen:after {
-  bottom: 0;
-  height: 21.7391304348%;
-  background: linear-gradient(to right, #006c6b 0%, #005857 16.6666666667%, white 16.6666666667%, #fafafa 33.3333333333%, #001b75 33.3333333333%, #001761 50%, #6c6c6c 50%, #626262 66.6666666667%, #929292 66.6666666667%, #888888 83.3333333333%, #3a3a3a 83.3333333333%, #303030 100%);
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-  */
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-wrapper {
+    width: 300px;
+    height: 400px;
+  }
 
-.lines {
-  display: flex;
-  column-gap: 0.1em;
-  align-self: flex-end;
-}
-.line1,
-.line3 {
-  width: 2px;
-  height: 0.5em;
-  background-color: black;
-  border-radius: 25px 25px 0px 0px;
-  margin-top: 0.5em;
-}
-.line2 {
-  flex-grow: 1;
-  width: 2px;
-  height: 1em;
-  background-color: black;
-  border-radius: 25px 25px 0px 0px;
-}
+  .error-code {
+    font-size: 80px;
+  }
 
-.buttons_div {
-  width: 4.25em;
-  align-self: center;
-  height: 8em;
-  background-color: #e69635;
-  border: 2px solid #1d0e01;
-  padding: 0.6em;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  row-gap: 0.75em;
-  box-shadow: 3px 3px 0px #e69635;
-}
-.b1 {
-  width: 1.65em;
-  height: 1.65em;
-  border-radius: 50%;
-  background-color: #7f5934;
-  border: 2px solid black;
-  box-shadow:
-    inset 2px 2px 1px #b49577,
-    -2px 0px #513721,
-    -2px 0px 0px 1px black;
-}
-.b1::before {
-  content: '';
-  position: absolute;
-  margin-top: 1em;
-  margin-left: 0.5em;
-  transform: rotate(47deg);
-  border-radius: 5px;
-  width: 0.1em;
-  height: 0.4em;
-  background-color: #000000;
-}
-.b1::after {
-  content: '';
-  position: absolute;
-  margin-top: 0.9em;
-  margin-left: 0.8em;
-  transform: rotate(47deg);
-  border-radius: 5px;
-  width: 0.1em;
-  height: 0.55em;
-  background-color: #000000;
-}
-.b1 div {
-  content: '';
-  position: absolute;
-  margin-top: -0.1em;
-  margin-left: 0.65em;
-  transform: rotate(45deg);
-  width: 0.15em;
-  height: 1.5em;
-  background-color: #000000;
-}
-.b2 {
-  width: 1.65em;
-  height: 1.65em;
-  border-radius: 50%;
-  background-color: #7f5934;
-  border: 2px solid black;
-  box-shadow:
-    inset 2px 2px 1px #b49577,
-    -2px 0px #513721,
-    -2px 0px 0px 1px black;
-}
-.b2::before {
-  content: '';
-  position: absolute;
-  margin-top: 1.05em;
-  margin-left: 0.8em;
-  transform: rotate(-45deg);
-  border-radius: 5px;
-  width: 0.15em;
-  height: 0.4em;
-  background-color: #000000;
-}
-.b2::after {
-  content: '';
-  position: absolute;
-  margin-top: -0.1em;
-  margin-left: 0.65em;
-  transform: rotate(-45deg);
-  width: 0.15em;
-  height: 1.5em;
-  background-color: #000000;
-}
-.speakers {
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5em;
-}
-.speakers .g1 {
-  display: flex;
-  column-gap: 0.25em;
-}
-.speakers .g1 .g11,
-.g12,
-.g13 {
-  width: 0.65em;
-  height: 0.65em;
-  border-radius: 50%;
-  background-color: #7f5934;
-  border: 2px solid black;
-  box-shadow: inset 1.25px 1.25px 1px #b49577;
-}
-.speakers .g {
-  width: auto;
-  height: 2px;
-  background-color: #171717;
-}
+  .message {
+    font-size: 20px;
+  }
 
-.bottom {
-  width: 100%;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 8.7em;
-}
-.base1 {
-  height: 1em;
-  width: 2em;
-  border: 2px solid #171717;
-  background-color: #4d4d4d;
-  margin-top: -0.15em;
-  z-index: -1;
-}
-.base2 {
-  height: 1em;
-  width: 2em;
-  border: 2px solid #171717;
-  background-color: #4d4d4d;
-  margin-top: -0.15em;
-  z-index: -1;
-}
-.base3 {
-  position: absolute;
-  height: 0.15em;
-  width: 17.5em;
-  background-color: #171717;
-  margin-top: 0.8em;
-}
+  .home-btn {
+    padding: 10px 25px;
+    font-size: 14px;
+  }
 
-.text_404 {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  column-gap: 6em;
-  z-index: -5;
-  margin-bottom: 2em;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.5;
-  font-family: Montserrat;
-}
-.text_4041 {
-  transform: scaleY(24.5) scaleX(9);
-}
-.text_4042 {
-  transform: scaleY(24.5) scaleX(9);
-}
-.text_4043 {
-  transform: scaleY(24.5) scaleX(9);
+  .back-message {
+    font-size: 24px;
+  }
+
+  .back-details {
+    font-size: 14px;
+  }
 }
 </style>
