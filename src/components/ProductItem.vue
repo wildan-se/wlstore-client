@@ -1,9 +1,14 @@
 <template>
   <div class="product-item">
-    <img :src="product.imageUrl" alt="" class="product-image" loading="lazy" />
+    <img
+      :src="`http://localhost:8000${product.imageUrl}`"
+      alt=""
+      class="product-image"
+      loading="lazy"
+    />
     <h3 class="product-name">{{ product.name }}</h3>
     <p class="product-price">Rp.{{ product.price }}</p>
-    <RouterLink :to="{ name: 'detail-product', params: { id: product.id } }">
+    <RouterLink :to="{ name: 'detail-product', params: { id: product.code } }">
       <button>Detail</button>
     </RouterLink>
   </div>

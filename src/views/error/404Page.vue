@@ -1,33 +1,26 @@
 <!-- NotFound.vue -->
 <template>
-  <div class="error-page">
-    <div class="container">
-      <div
-        class="card-wrapper"
-        @mousemove="handleMouseMove"
-        @mouseleave="handleMouseLeave"
-      >
-        <div class="card" :style="cardStyle">
-          <div class="card-front">
-            <div class="error-code" :class="{ glitch: startGlitch }">404</div>
-            <div class="message" v-show="showMessage">
-              Oops! Halaman yang Anda cari tidak ditemukan.
-            </div>
-            <router-link to="/" class="home-btn" v-show="showButton">
-              Kembali ke Beranda
-            </router-link>
-          </div>
-          <div class="card-back">
-            <div class="back-content">
-              <div class="error-icon">❌</div>
-              <div class="back-message">Page Not Found</div>
-              <div class="back-details">
-                The page you're looking for might have been removed, had its
-                name changed, or is temporarily unavailable.
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="not-found-container">
+    <div class="background">
+      <div v-for="n in 20" :key="n" class="circle-container">
+        <div class="circle"></div>
+      </div>
+    </div>
+    <div class="particles" ref="particles"></div>
+    <div
+      class="card"
+      ref="card"
+      @mousemove="handleMouseMove"
+      @mouseleave="handleMouseLeave"
+    >
+      <div class="card-content" ref="cardContent">
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+          Oops! The page you are looking for might have been removed, had its
+          name changed, or is temporarily unavailable.
+        </p>
+        <router-link to="/" class="home-button">Back to Home</router-link>
       </div>
     </div>
   </div>
@@ -36,263 +29,260 @@
 <script>
 export default {
   name: 'NotFound',
-  data() {
-    return {
-      showMessage: false,
-      showButton: false,
-      startGlitch: false,
-      rotateX: 0,
-      rotateY: 0,
-      isAutoRotating: true,
-    }
-  },
-  computed: {
-    cardStyle() {
-      return {
-        transform: `
-          rotateX(${this.rotateX}deg) 
-          rotateY(${this.rotateY}deg)
-        `,
-      }
-    },
-  },
   mounted() {
-    setTimeout(() => {
-      this.startGlitch = true
-    }, 300)
-    setTimeout(() => {
-      this.showMessage = true
-    }, 800)
-    setTimeout(() => {
-      this.showButton = true
-    }, 1300)
-    this.startAutoRotation()
+    this.createParticles()
+    // Memastikan background full layar
+    document.body.style.margin = '0'
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.height = '100%'
+    document.body.style.height = '100%'
   },
-  beforeUnmount() {
-    this.stopAutoRotation()
+  unmounted() {
+    // Membersihkan style ketika komponen unmount
+    document.body.style.margin = ''
+    document.body.style.overflow = ''
+    document.documentElement.style.height = ''
+    document.body.style.height = ''
   },
   methods: {
+    createParticles() {
+      const particlesContainer = this.$refs.particles
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div')
+        particle.className = 'particle'
+        particle.style.left = `${Math.random() * 100}%`
+        particle.style.top = `${Math.random() * 100}%`
+        particle.style.animationDelay = `${Math.random() * 4}s`
+        particlesContainer.appendChild(particle)
+      }
+    },
     handleMouseMove(e) {
-      this.isAutoRotating = false
-      const card = e.currentTarget
+      const card = this.$refs.card
+      const cardContent = this.$refs.cardContent
       const rect = card.getBoundingClientRect()
-      const centerX = rect.left + rect.width / 2
-      const centerY = rect.top + rect.height / 2
-      const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 30
-      const rotateX = -((e.clientY - centerY) / (rect.height / 2)) * 30
 
-      this.rotateX = rotateX
-      this.rotateY = rotateY
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+
+      const centerX = rect.width / 2
+      const centerY = rect.height / 2
+
+      const rotateX = (y - centerY) / 20
+      const rotateY = -(x - centerX) / 20
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`
+      cardContent.style.transform = 'translateZ(60px)'
     },
     handleMouseLeave() {
-      this.isAutoRotating = true
-      this.startAutoRotation()
-    },
-    startAutoRotation() {
-      let angle = 0
-      const animate = () => {
-        if (!this.isAutoRotating) return
-        angle = (angle + 0.5) % 360
-        this.rotateY = Math.sin((angle * Math.PI) / 180) * 15
-        this.rotateX = Math.cos((angle * Math.PI) / 180) * 15
-        this.animationFrame = requestAnimationFrame(animate)
-      }
-      this.animationFrame = requestAnimationFrame(animate)
-    },
-    stopAutoRotation() {
-      if (this.animationFrame) {
-        cancelAnimationFrame(this.animationFrame)
-      }
+      const card = this.$refs.card
+      const cardContent = this.$refs.cardContent
+
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)'
+      cardContent.style.transform = 'translateZ(0)'
     },
   },
 }
 </script>
 
 <style scoped>
-.error-page {
-  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+/* Reset default margins dan set full height */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.not-found-container {
   min-height: 100vh;
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  background: #1a1a1a;
+  overflow: hidden;
   font-family: 'Arial', sans-serif;
-  perspective: 1000px;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
-.container {
-  padding: 2rem;
-  position: relative;
+/* Background animation styles */
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
 }
 
-.card-wrapper {
-  width: 400px;
-  height: 500px;
-  perspective: 1000px;
-  cursor: pointer;
+.circle-container {
+  position: absolute;
+  transform: translateY(0);
+  animation: fall linear infinite;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(108, 99, 255, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Generate different animations for each circle */
+.circle-container:nth-child(1) {
+  left: 10vw;
+  animation-duration: 15s;
+  animation-delay: -10s;
+}
+
+.circle-container:nth-child(2) {
+  left: 20vw;
+  animation-duration: 18s;
+  animation-delay: -20s;
+}
+
+/* Repeat for all 20 elements with different values */
+.circle-container:nth-child(3) {
+  left: 30vw;
+  animation-duration: 20s;
+  animation-delay: -30s;
+}
+
+/* Add similar rules for nth-child(4) to nth-child(20) */
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20vh) translateX(0);
+  }
+  50% {
+    transform: translateX(20px);
+  }
+  100% {
+    transform: translateY(120vh) translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.4;
+  }
+}
+
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: float 4s infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(100px);
+    opacity: 0;
+  }
 }
 
 .card {
-  width: 100%;
-  height: 100%;
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.1s ease-out;
-}
-
-.card-front,
-.card-back {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  backface-visibility: hidden;
-  border-radius: 20px;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  z-index: 2;
+  width: 400px;
+  height: 500px;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.5s ease;
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
 }
 
-.card-back {
-  transform: rotateY(180deg);
-  background: rgba(255, 255, 255, 0.15);
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card-content {
+  text-align: center;
+  transform: translateZ(60px);
+  transition: transform 0.5s ease;
 }
 
 .error-code {
   font-size: 120px;
+  color: #6c63ff;
   font-weight: bold;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   margin-bottom: 20px;
-  opacity: 0;
-  transform: scale(0.8);
-  transition:
-    opacity 0.5s,
-    transform 0.5s;
+  text-shadow: 2px 2px 10px rgba(108, 99, 255, 0.5);
 }
 
-.error-code.glitch {
-  opacity: 1;
-  transform: scale(1);
-  animation: glitch 5s infinite;
-}
-
-.message {
+.error-title {
   font-size: 24px;
   color: #fff;
-  text-align: center;
-  margin-bottom: 30px;
-  animation: fadeInUp 1s ease-out;
-}
-
-.home-btn {
-  padding: 12px 30px;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  border: none;
-  border-radius: 25px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition:
-    transform 0.3s,
-    box-shadow 0.3s;
-  text-decoration: none;
-  animation: fadeInUp 1s ease-out;
-}
-
-.home-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.back-content {
-  text-align: center;
-  color: #fff;
-}
-
-.error-icon {
-  font-size: 50px;
   margin-bottom: 20px;
 }
 
-.back-message {
-  font-size: 28px;
-  margin-bottom: 15px;
+.error-message {
+  color: #ccc;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.home-button {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #6c63ff;
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
   font-weight: bold;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  border: none;
+  cursor: pointer;
 }
 
-.back-details {
-  font-size: 16px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.8);
+.home-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
 }
 
-@keyframes glitch {
-  0% {
-    transform: translateX(0) scale(1);
-    filter: hue-rotate(0deg);
-  }
-  25% {
-    transform: translateX(-5px) scale(1.02) skew(10deg);
-    filter: hue-rotate(90deg);
-  }
-  50% {
-    transform: translateX(5px) scale(0.98) skew(-10deg);
-    filter: hue-rotate(180deg);
-  }
-  75% {
-    transform: translateX(-3px) scale(1.01) skew(5deg);
-    filter: hue-rotate(270deg);
-  }
-  100% {
-    transform: translateX(0) scale(1);
-    filter: hue-rotate(360deg);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .card-wrapper {
-    width: 300px;
-    height: 400px;
+@media (max-width: 480px) {
+  .card {
+    width: 90%;
+    height: auto;
+    padding: 30px;
   }
 
   .error-code {
     font-size: 80px;
-  }
-
-  .message {
-    font-size: 20px;
-  }
-
-  .home-btn {
-    padding: 10px 25px;
-    font-size: 14px;
-  }
-
-  .back-message {
-    font-size: 24px;
-  }
-
-  .back-details {
-    font-size: 14px;
   }
 }
 </style>
