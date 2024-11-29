@@ -1,7 +1,7 @@
 <template>
   <div class="product-container">
     <img
-      :src="item.imageUrl"
+      :src="`http://localhost:8000${item.imageUrl}`"
       alt="Product Image"
       class="product-image"
       loading="lazy"
@@ -10,7 +10,9 @@
       <h3>{{ item.name }}</h3>
       <p>Rp.{{ item.price }}</p>
     </div>
-    <button class="remove-button">Remove</button>
+    <button class="remove-button" @click="$emit('remove-item', item.code)">
+      Remove
+    </button>
   </div>
 </template>
 <script>

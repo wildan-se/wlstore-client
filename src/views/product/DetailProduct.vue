@@ -1,23 +1,36 @@
 <template>
   <div class="container">
+    <!-- Jika produk ditemukan -->
     <div id="page-wrap" v-if="product">
+      <!-- Notifikasi pop-up -->
+
+      <div class="container-popup">
+        <transition name="fade">
+          <h4 v-if="notif" class="notif">{{ notif }}</h4></transition
+        >
+      </div>
+
       <div id="img-wrap">
         <img
           :src="`http://localhost:8000${product.imageUrl}`"
           alt="Product Image"
+          loading="lazy"
         />
       </div>
       <div id="product-details">
         <h1>{{ product.name }}</h1>
         <h3 id="price">Rp{{ product.price }}</h3>
         <p class="rating">Average rating: {{ product.averageRating }}</p>
-        <button id="add-to-cart">Add to Cart</button>
+        <button id="add-to-cart" @click="addToCart(product.code)">
+          Add to Cart
+        </button>
         <p class="description">
           {{ product.description }}
         </p>
       </div>
     </div>
 
+    <!-- Jika produk tidak ditemukan -->
     <NotFound v-else />
   </div>
 </template>
@@ -25,25 +38,73 @@
 <script>
 import axios from 'axios'
 import NotFound from '../error/404Page.vue'
+
 export default {
   components: {
     NotFound,
   },
   data() {
     return {
-      product: {},
+      product: null, // Ubah menjadi null sebagai default
+      notif: null, // Notifikasi pop-up
     }
   },
+  methods: {
+    // Menambahkan produk ke keranjang
+    async addToCart(productCode) {
+      try {
+        const response = await axios.post(
+          'http://localhost:8000/api/orders/user/1/add',
+          {
+            product: productCode,
+          },
+        )
 
+        // Tampilkan notifikasi
+        this.notif = 'Item added successfully!'
+        setTimeout(() => {
+          this.notif = null // Sembunyikan notifikasi setelah 3 detik
+        }, 3000)
+
+        console.log('Product added:', response.data)
+      } catch (error) {
+        console.error('Failed to add product to cart:', error)
+
+        // Tampilkan notifikasi error
+        this.notif = 'Failed to add item. Please try again.'
+        setTimeout(() => {
+          this.notif = null // Sembunyikan notifikasi setelah 3 detik
+        }, 3000)
+      }
+    },
+  },
   async created() {
     const code = this.$route.params.id
-    const result = await axios.get(`http://localhost:8000/api/products/${code}`)
-    this.product = result.data
+    try {
+      const result = await axios.get(
+        `http://localhost:8000/api/products/${code}`,
+      )
+      this.product = result.data
+    } catch (error) {
+      console.error('Failed to fetch product data:', error)
+      this.product = null
+    }
   },
 }
 </script>
 
 <style scoped>
+/* Transisi untuk notifikasi */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Gaya kontainer dan elemen lainnya */
 .container {
   display: flex;
   justify-content: center;
@@ -78,10 +139,6 @@ img {
   max-width: 400px;
   border-radius: 6px;
   transition: transform 0.3s ease;
-}
-
-img:hover {
-  transform: scale(1.02);
 }
 
 #product-details {
@@ -134,5 +191,52 @@ h1 {
 
 #add-to-cart:active {
   background-color: #c92a2a;
+}
+
+/* Gaya notifikasi */
+.notif {
+  position: fixed; /* Letakkan di tengah layar */
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Pastikan muncul di atas elemen lainnya */
+  text-align: center;
+  color: white;
+  background-color: #41b883;
+  padding: 15px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation:
+    fadeIn 0.3s ease,
+    fadeOut 0.3s ease 2.7s; /* Tambahkan efek animasi keluar */
+}
+
+/* Efek transisi */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Animasi untuk notifikasi */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 </style>

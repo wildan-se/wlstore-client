@@ -2,7 +2,14 @@
   <div>
     <div id="page-wrap">
       <h1>Shopping Cart</h1>
-      <ItemCart v-for="item in cartItems" :key="item.id" :item="item" />
+      <!-- Menampilkan item dalam keranjang -->
+      <ItemCart
+        v-for="item in cartItems"
+        :key="item.id"
+        :item="item"
+        v-on:remove-item="removeFromCart($event)"
+      />
+
       <h3 id="total-price">Total: Rp.{{ totalPrice }}</h3>
       <button id="checkout-button">Checkout</button>
     </div>
@@ -10,22 +17,47 @@
 </template>
 
 <script>
-import { cartItems } from '@/data-seed'
+import axios from 'axios'
 import ItemCart from '@/components/ItemCart.vue'
+
 export default {
   components: {
     ItemCart,
   },
   data() {
     return {
-      cartItems,
+      cartItems: [], // Menyimpan item keranjang
     }
+  },
+
+  methods: {
+    async removeFromCart(product) {
+      await axios.delete(
+        `http://localhost:8000/api/orders/delete/user/1/product/${product}`,
+      )
+      let indexCart = this.cartItems
+        .map(function (item) {
+          return item.code
+        })
+        .indexOf(product)
+      this.cartItems.splice(indexCart, 1)
+    },
   },
   computed: {
     // Menghitung total harga dari semua item di keranjang
     totalPrice() {
       return this.cartItems.reduce((sum, item) => sum + Number(item.price), 0)
     },
+  },
+  async created() {
+    const result = await axios.get('http://localhost:8000/api/orders/user/1')
+    let data = Object.assign(
+      {},
+      ...result.data.map(result => ({
+        cart_items: result.products,
+      })),
+    )
+    this.cartItems = data.cart_items
   },
 }
 </script>
