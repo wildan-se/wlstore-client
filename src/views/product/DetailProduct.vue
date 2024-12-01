@@ -21,6 +21,7 @@
         <h1>{{ product.name }}</h1>
         <h3 id="price">Rp{{ product.price }}</h3>
         <p class="rating">Average rating: {{ product.averageRating }}</p>
+        <!-- ketika tombol di klik, maka memanggil fungsi addToCart dan mengirimkan product.code dari API -->
         <button id="add-to-cart" @click="addToCart(product.code)">
           Add to Cart
         </button>
@@ -36,56 +37,62 @@
 </template>
 
 <script>
+// Mengimpor library Axios untuk HTTP request
 import axios from 'axios'
+// Mengimpor komponen NotFound untuk halaman produk yang tidak ditemukan
 import NotFound from '../error/404Page.vue'
 
 export default {
   components: {
-    NotFound,
+    NotFound, // Menambahkan komponen NotFound sebagai bagian dari komponen ini
   },
   data() {
     return {
-      product: null, // Ubah menjadi null sebagai default
-      notif: null, // Notifikasi pop-up
+      product: null, // Menyimpan data produk yang diambil dari API
+      notif: null, // Menyimpan pesan notifikasi (sukses atau error)
     }
   },
   methods: {
-    // Menambahkan produk ke keranjang
+    // Metode untuk menambahkan produk ke keranjang
     async addToCart(productCode) {
       try {
+        // Mengirim permintaan POST ke API untuk menambahkan produk ke keranjang
         const response = await axios.post(
           'http://localhost:8000/api/orders/user/1/add',
           {
-            product: productCode,
+            product: productCode, // Mengirimkan kode produk sebagai data payload
           },
         )
 
-        // Tampilkan notifikasi
+        // Jika berhasil, tampilkan notifikasi sukses
         this.notif = 'Item added successfully!'
         setTimeout(() => {
-          this.notif = null // Sembunyikan notifikasi setelah 3 detik
+          this.notif = null // Menghapus notifikasi setelah 3 detik
         }, 3000)
 
         console.log('Product added:', response.data)
       } catch (error) {
+        // Jika gagal, tampilkan notifikasi error
         console.error('Failed to add product to cart:', error)
-
-        // Tampilkan notifikasi error
         this.notif = 'Failed to add item. Please try again.'
         setTimeout(() => {
-          this.notif = null // Sembunyikan notifikasi setelah 3 detik
+          this.notif = null // Menghapus notifikasi setelah 3 detik
         }, 3000)
       }
     },
   },
   async created() {
+    // Mengambil parameter ID produk dari URL
     const code = this.$route.params.id
     try {
+      // Mengirim permintaan GET ke API untuk mendapatkan data produk berdasarkan ID
       const result = await axios.get(
         `http://localhost:8000/api/products/${code}`,
       )
+      // Menyimpan data produk ke dalam variabel state `product`
       this.product = result.data
     } catch (error) {
+      // Jika gagal mengambil data, tampilkan log error dan set product ke null
       console.error('Failed to fetch product data:', error)
       this.product = null
     }

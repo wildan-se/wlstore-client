@@ -1,15 +1,23 @@
 <template>
+  <!-- Komponen utama untuk item di keranjang belanja -->
   <div class="cart-item">
+    <!-- Gambar produk -->
+    <!-- Sumber gambar, diambil dari properti item.imageUrl -->
+
     <img
       :src="`http://localhost:8000${item.imageUrl}`"
       alt="Product Image"
       loading="lazy"
       class="product-image"
     />
+    <!-- Detail produk -->
     <div class="product-details">
+      <!-- Nama produk, ditampilkan menggunakan properti item.name -->
       <h4>{{ item.name }}</h4>
+      <!-- Harga produk, diformat ke dalam format rupiah Indonesia -->
       <p>Rp. {{ parseFloat(item.price).toLocaleString('id-ID') }}</p>
     </div>
+    <!-- Tombol untuk menghapus item dari keranjang -->
     <button @click="$emit('remove-item', item.code)" class="remove-button">
       Remove
     </button>
@@ -18,10 +26,12 @@
 
 <script>
 export default {
+  // Mendeklarasikan properti yang diterima oleh komponen
   props: {
+    // Properti 'item' adalah sebuah objek dan wajib disediakan
     item: {
-      type: Object,
-      required: true,
+      type: Object, // Tipe data properti
+      required: true, // Wajib diisi
     },
   },
 }

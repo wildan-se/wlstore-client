@@ -3,11 +3,19 @@
     <div class="nav">
       <h1>WLstore</h1>
       <nav>
-        <RouterLink :to="{ name: 'index-product' }" id="products-link"
-          >Product</RouterLink
-        >
+        <!-- Link navigasi ke halaman produk -->
+        <!-- Menggunakan nama route untuk mengarahkan ke halaman produk -->
+        <RouterLink :to="{ name: 'index-product' }" id="products-link">
+          Product
+          <!-- Teks yang ditampilkan untuk link ini -->
+        </RouterLink>
+
+        <!-- Link navigasi ke halaman keranjang -->
+        <!-- Menggunakan nama route untuk mengarahkan ke halaman keranjang -->
         <RouterLink :to="{ name: 'index-cart' }" id="cart-link">
+          <!-- Tombol yang menjadi bagian dari link -->
           <button>Cart</button>
+          <!-- Teks tombol untuk mengarahkan ke keranjang -->
         </RouterLink>
       </nav>
     </div>

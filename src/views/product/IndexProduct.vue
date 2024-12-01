@@ -13,20 +13,31 @@
 </template>
 
 <script>
+// Mengimpor Axios untuk melakukan HTTP request
 import axios from 'axios'
+// Mengimpor komponen ProductItem untuk menampilkan produk individual
 import ProductItem from '../../components/ProductItem.vue'
+
 export default {
   components: {
-    ProductItem,
+    ProductItem, // Mendaftarkan komponen ProductItem agar dapat digunakan dalam template
   },
   data() {
     return {
-      products: [],
+      products: [], // Menyimpan daftar produk yang diambil dari API
     }
   },
   async created() {
-    const result = await axios.get('http://localhost:8000/api/products')
-    this.products = result.data
+    // Lifecycle hook yang dipanggil ketika komponen dibuat
+    try {
+      // Mengirim permintaan GET ke API untuk mengambil daftar produk
+      const result = await axios.get('http://localhost:8000/api/products')
+      // Menyimpan data produk dari respons API ke dalam state lokal
+      this.products = result.data
+    } catch (error) {
+      // Menangani kesalahan jika permintaan gagal
+      console.error('Failed to fetch products:', error)
+    }
   },
 }
 </script>
