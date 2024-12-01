@@ -1,71 +1,55 @@
 <template>
-  <div class="product-container">
+  <div class="cart-item">
     <img
       :src="`http://localhost:8000${item.imageUrl}`"
       alt="Product Image"
-      class="product-image"
       loading="lazy"
+      class="product-image"
     />
-    <div class="details-wrap">
-      <h3>{{ item.name }}</h3>
-      <p>Rp.{{ item.price }}</p>
+    <div class="product-details">
+      <h4>{{ item.name }}</h4>
+      <p>Rp. {{ parseFloat(item.price).toLocaleString('id-ID') }}</p>
     </div>
-    <button class="remove-button" @click="$emit('remove-item', item.code)">
+    <button @click="$emit('remove-item', item.code)" class="remove-button">
       Remove
     </button>
   </div>
 </template>
+
 <script>
 export default {
-  props: ['item'],
+  props: {
+    item: {
+      type: Object,
+      required: true,
+    },
+  },
 }
 </script>
+
 <style scoped>
-.product-container {
+.cart-item {
   display: flex;
   align-items: center;
-  padding: 16px 0;
-  border-bottom: 1px solid #ddd;
+  margin: 10px 0;
 }
 
 .product-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  background-color: #f0f0f0;
+  width: 50px;
+  height: 50px;
   object-fit: cover;
-  margin-right: 16px;
+  margin-right: 10px;
 }
 
-.details-wrap {
+.product-details {
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.details-wrap h3 {
-  font-size: 1.2em;
-  color: #333;
-  margin: 0;
-}
-
-.details-wrap p {
-  color: #41b883;
-  font-size: 1em;
-  margin: 0;
 }
 
 .remove-button {
-  background-color: transparent;
-  color: #e63946;
+  background-color: red;
+  color: white;
   border: none;
+  padding: 5px 10px;
   cursor: pointer;
-  font-size: 0.9em;
-  transition: color 0.3s ease;
-}
-
-.remove-button:hover {
-  color: #c92a2a;
 }
 </style>

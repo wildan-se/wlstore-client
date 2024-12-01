@@ -33,7 +33,7 @@ export default {
   methods: {
     async removeFromCart(product) {
       await axios.delete(
-        `http://localhost:8000/api/orders/delete/user/1/product/${product}`,
+        `http://localhost:8000/api/orders/user/1/product/${product}`,
       )
       let indexCart = this.cartItems
         .map(function (item) {
