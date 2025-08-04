@@ -1,8 +1,12 @@
-<!-- NotFound.vue -->
 <template>
   <div class="not-found-container">
     <div class="background">
-      <div v-for="n in 20" :key="n" class="circle-container">
+      <div
+        v-for="n in 50"
+        :key="n"
+        class="circle-container"
+        :style="circleStyle(n)"
+      >
         <div class="circle"></div>
       </div>
     </div>
@@ -80,12 +84,27 @@ export default {
       card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)'
       cardContent.style.transform = 'translateZ(0)'
     },
+    // Dynamically generate styles for each circle
+    circleStyle(n) {
+      // Use 'n' to seed the random values for consistent and unique styles
+      function seededRandom(seed) {
+        var x = Math.sin(seed) * 10000
+        return x - Math.floor(x)
+      }
+      const duration = 15 + seededRandom(n) * 10 // 15s to 25s
+      const delay = -seededRandom(n + 100) * 30 // -30s to 0s
+      const left = seededRandom(n + 200) * 100 // 0% to 100%
+      return {
+        left: `${left}vw`,
+        animationDuration: `${duration}s`,
+        animationDelay: `${delay}s`,
+      }
+    },
   },
 }
 </script>
 
 <style scoped>
-/* Reset default margins dan set full height */
 html,
 body {
   margin: 0;
@@ -108,7 +127,6 @@ body {
   left: 0;
 }
 
-/* Background animation styles */
 .background {
   position: fixed;
   top: 0;
@@ -133,27 +151,7 @@ body {
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* Generate different animations for each circle */
-.circle-container:nth-child(1) {
-  left: 10vw;
-  animation-duration: 15s;
-  animation-delay: -10s;
-}
-
-.circle-container:nth-child(2) {
-  left: 20vw;
-  animation-duration: 18s;
-  animation-delay: -20s;
-}
-
-/* Repeat for all 20 elements with different values */
-.circle-container:nth-child(3) {
-  left: 30vw;
-  animation-duration: 20s;
-  animation-delay: -30s;
-}
-
-/* Add similar rules for nth-child(4) to nth-child(20) */
+/* No need for repetitive nth-child rules if using dynamic styles */
 
 @keyframes fall {
   0% {

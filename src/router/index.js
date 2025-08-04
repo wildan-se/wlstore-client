@@ -1,38 +1,92 @@
-// Import fungsi dan komponen yang dibutuhkan untuk konfigurasi Vue Router
 import { createRouter, createWebHistory } from 'vue-router'
-// Mengimpor komponen untuk setiap halaman yang akan dihubungkan dengan rute
-import IndexProduct from '@/views/product/IndexProduct.vue' // Halaman utama produk
-import DetailProduct from '@/views/product/DetailProduct.vue' // Halaman detail produk
-import IndexCart from '@/views/cart/IndexCart.vue' // Halaman keranjang belanja
-import NotFound from '@/views/error/404Page.vue' // Halaman untuk rute tidak ditemukan
+import IndexProduct from '@/views/product/IndexProduct.vue'
+import DetailProduct from '@/views/product/DetailProduct.vue'
+import IndexCart from '@/views/cart/IndexCart.vue'
+import NotFound from '@/views/error/404Page.vue'
+import AdminProducts from '@/views/admin/AdminProducts.vue'
+import AdminDashboard from '@/views/admin/AdminDashboard.vue'
+import AdminOrders from '@/views/admin/AdminOrders.vue'
+import LoginPage from '@/views/auth/LoginPage.vue'
 
-// Membuat instance router dengan konfigurasi
 const router = createRouter({
-  // Menggunakan mode history untuk navigasi berbasis URL yang bersih
   history: createWebHistory(import.meta.env.BASE_URL),
-  // Daftar rute
   routes: [
     {
-      path: '/', // URL untuk halaman utama
-      name: 'index-product', // Nama rute, digunakan untuk navigasi programatik
-      component: IndexProduct, // Komponen yang dirender untuk rute ini
+      path: '/',
+      name: 'index-product',
+      component: IndexProduct,
     },
     {
-      path: '/product/:id', // URL dengan parameter dinamis ":id"
-      name: 'detail-product', // Nama rute untuk halaman detail produk
-      component: DetailProduct, // Komponen yang dirender
+      path: '/product/:id',
+      name: 'detail-product',
+      component: DetailProduct,
+      props: true,
     },
     {
-      path: '/cart', // URL untuk halaman keranjang belanja
-      name: 'index-cart', // Nama rute untuk navigasi ke halaman keranjang
-      component: IndexCart, // Komponen yang dirender
+      path: '/cart',
+      name: 'index-cart',
+      component: IndexCart,
     },
     {
-      path: '/:pathMatch(.*)*', // Rute untuk menangkap semua URL yang tidak sesuai rute lain
-      component: NotFound, // Komponen halaman 404 (tidak ditemukan)
+      path: '/login',
+      name: 'login',
+      component: LoginPage,
+      meta: { requiresGuest: true },
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'admin-dashboard',
+      component: AdminDashboard,
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/products',
+      name: 'admin-products',
+      component: AdminProducts,
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/orders',
+      name: 'admin-orders',
+      component: AdminOrders,
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound,
     },
   ],
 })
 
-// Mengekspor instance router agar dapat digunakan di file utama aplikasi
+// Navigation Guard
+router.beforeEach((to, from, next) => {
+  const userRole = localStorage.getItem('userRole')
+  const isAuthenticated = !!localStorage.getItem('authToken')
+  const isAdmin = userRole === 'admin'
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    // Jika rute butuh otentikasi tapi belum login, redirect ke halaman login
+    next({ name: 'login' })
+  } else if (to.meta.requiresAdmin && !isAdmin) {
+    // Jika rute butuh admin role tapi bukan admin, redirect ke home
+    next({ name: 'index-product' })
+  } else if (to.meta.requiresGuest && isAuthenticated) {
+    // Jika rute hanya untuk tamu (misal halaman login), tapi sudah login, redirect sesuai role
+    if (isAdmin) {
+      next({ name: 'admin-dashboard' })
+    } else {
+      next({ name: 'index-product' })
+    }
+  } else if (isAdmin && to.name === 'index-product') {
+    // Redirect admin dari halaman product ke dashboard
+    next({ name: 'admin-dashboard' })
+  } else if (isAdmin && to.name === 'index-cart') {
+    // Redirect admin dari halaman cart ke dashboard
+    next({ name: 'admin-dashboard' })
+  } else {
+    next() // Lanjutkan navigasi
+  }
+})
+
 export default router

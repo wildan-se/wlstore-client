@@ -12,6 +12,6 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0', // Ganti dengan IP atau hostname yang diinginkan
-    port: 8080, // Ganti dengan port yang Anda inginkan
+    port: 5173, // Ganti dengan port yang Anda inginkan
   },
 })
