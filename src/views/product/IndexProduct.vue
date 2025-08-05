@@ -1,26 +1,33 @@
 <template>
-  <div class="products-page">
+  <div class="min-h-screen bg-gradient-to-br from-base-200 to-primary/10">
     <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="container">
-        <div class="hero-content">
-          <h1 class="hero-title animate-fade-in">Discover Amazing Products</h1>
-          <p class="hero-subtitle animate-fade-in">
+    <section
+      class="hero bg-gradient-to-r from-primary to-secondary text-primary-content relative overflow-hidden"
+    >
+      <div class="hero-overlay bg-opacity-30"></div>
+      <div class="hero-content text-center py-20 z-10">
+        <div class="max-w-md">
+          <h1 class="mb-5 text-5xl font-bold animate-fade-in">
+            Discover Amazing Products
+          </h1>
+          <p class="mb-5 opacity-90 animate-fade-in">
             Find everything you need in our curated collection of quality
             products
           </p>
-          <div class="hero-stats animate-fade-in">
-            <div class="stat-item">
-              <span class="stat-number">{{ products.length }}+</span>
-              <span class="stat-label">Products</span>
+          <div
+            class="stats bg-base-100/10 backdrop-blur-sm text-primary-content animate-fade-in"
+          >
+            <div class="stat">
+              <div class="stat-value">{{ products.length }}+</div>
+              <div class="stat-title opacity-80">Products</div>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">100%</span>
-              <span class="stat-label">Quality</span>
+            <div class="stat">
+              <div class="stat-value">100%</div>
+              <div class="stat-title opacity-80">Quality</div>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">24/7</span>
-              <span class="stat-label">Support</span>
+            <div class="stat">
+              <div class="stat-value">24/7</div>
+              <div class="stat-title opacity-80">Support</div>
             </div>
           </div>
         </div>
@@ -28,101 +35,147 @@
     </section>
 
     <!-- Main Content -->
-    <main class="main-content">
-      <div class="container">
-        <!-- Filters and Search -->
-        <div class="products-header">
-          <div class="search-section">
-            <div class="search-box">
-              <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
-                />
-              </svg>
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search products..."
-                class="search-input"
-                @input="handleSearch"
-              />
+    <main class="container mx-auto px-4 py-16 -mt-8 relative z-20">
+      <!-- Filters and Search -->
+      <div class="card bg-base-100 shadow-xl mb-12">
+        <div class="card-body">
+          <div class="flex flex-col lg:flex-row gap-6 items-center">
+            <!-- Search Section -->
+            <div class="flex-1 w-full max-w-md">
+              <div class="form-control">
+                <div class="input-group">
+                  <span class="bg-base-200">
+                    <svg
+                      class="w-5 h-5"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    v-model="searchQuery"
+                    type="text"
+                    placeholder="Search products..."
+                    class="input input-bordered w-full"
+                    @input="handleSearch"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="flex items-center gap-4 w-full lg:w-auto">
+              <select
+                v-model="sortBy"
+                @change="handleSort"
+                class="select select-bordered w-full max-w-xs"
+              >
+                <option value="">Sort by</option>
+                <option value="name">Name</option>
+                <option value="price">Price: Low to High</option>
+                <option value="-price">Price: High to Low</option>
+                <option value="-averageRating">Rating</option>
+              </select>
+
+              <div class="btn-group">
+                <button
+                  :class="['btn', viewMode === 'grid' ? 'btn-active' : '']"
+                  @click="viewMode = 'grid'"
+                >
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  :class="['btn', viewMode === 'list' ? 'btn-active' : '']"
+                  @click="viewMode = 'list'"
+                >
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="filter-section">
-            <select v-model="sortBy" @change="handleSort" class="filter-select">
-              <option value="">Sort by</option>
-              <option value="name">Name</option>
-              <option value="price">Price: Low to High</option>
-              <option value="-price">Price: High to Low</option>
-              <option value="-averageRating">Rating</option>
-            </select>
+      <!-- Products Section -->
+      <div class="products-section">
+        <!-- Loading State -->
+        <div v-if="loading" class="py-8">
+          <div
+            :class="[
+              'grid gap-6',
+              viewMode === 'grid'
+                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                : 'grid-cols-1 max-w-4xl mx-auto',
+            ]"
+          >
+            <div
+              v-for="i in 8"
+              :key="i"
+              class="card bg-base-100 shadow-lg animate-pulse"
+            >
+              <div class="h-48 bg-base-200 rounded-t-2xl"></div>
+              <div class="card-body">
+                <div class="h-4 bg-base-200 rounded mb-2"></div>
+                <div class="h-4 bg-base-200 rounded w-3/5 mb-4"></div>
+                <div class="h-10 bg-base-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <div class="view-toggle">
-              <button
-                :class="['view-btn', { active: viewMode === 'grid' }]"
-                @click="viewMode = 'grid'"
+        <!-- Error State -->
+        <div v-else-if="error" class="text-center py-16">
+          <div class="card bg-error/10 text-error-content max-w-md mx-auto">
+            <div class="card-body text-center">
+              <svg
+                class="w-16 h-16 mx-auto mb-4 text-error"
+                viewBox="0 0 24 24"
+                fill="currentColor"
               >
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path
-                    d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"
-                  />
-                </svg>
-              </button>
-              <button
-                :class="['view-btn', { active: viewMode === 'list' }]"
-                @click="viewMode = 'list'"
-              >
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path
-                    d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
-                  />
-                </svg>
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                />
+              </svg>
+              <h3 class="text-xl font-semibold mb-2">
+                Oops! Something went wrong
+              </h3>
+              <p class="mb-4 opacity-70">{{ error }}</p>
+              <button @click="fetchProducts" class="btn btn-primary">
+                Try Again
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Products Grid/List -->
-        <div class="products-section">
-          <!-- Loading State -->
-          <div v-if="loading" class="loading-section">
-            <div class="loading-grid">
-              <div v-for="i in 8" :key="i" class="skeleton-card">
-                <div class="skeleton skeleton-image"></div>
-                <div class="skeleton skeleton-text"></div>
-                <div class="skeleton skeleton-text short"></div>
-                <div class="skeleton skeleton-button"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Error State -->
-          <div v-else-if="error" class="error-section">
-            <div class="error-content">
-              <svg class="error-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                />
-              </svg>
-              <h3 class="error-title">Oops! Something went wrong</h3>
-              <p class="error-message">{{ error }}</p>
-              <button @click="fetchProducts" class="btn btn-primary retry-btn">
-                Try Again
-              </button>
-            </div>
-          </div>
-
-          <!-- Empty State -->
-          <div v-else-if="filteredProducts.length === 0" class="empty-section">
-            <div class="empty-content">
-              <svg class="empty-icon" viewBox="0 0 24 24" fill="currentColor">
+        <!-- Empty State -->
+        <div
+          v-else-if="filteredProducts.length === 0"
+          class="text-center py-16"
+        >
+          <div class="card bg-base-100 max-w-md mx-auto">
+            <div class="card-body text-center">
+              <svg
+                class="w-16 h-16 mx-auto mb-4 text-base-content/50"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
                 <path
                   d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
                 />
               </svg>
-              <h3 class="empty-title">No products found</h3>
-              <p class="empty-message">
+              <h3 class="text-xl font-semibold mb-2">No products found</h3>
+              <p class="opacity-70">
                 {{
                   searchQuery
                     ? 'Try adjusting your search terms'
@@ -131,17 +184,25 @@
               </p>
             </div>
           </div>
+        </div>
 
-          <!-- Products Display -->
-          <div v-else :class="['products-container', viewMode]">
-            <ProductItem
-              v-for="product in filteredProducts"
-              :key="product.code"
-              :product="product"
-              @product-added-to-cart="handleProductAdded"
-              class="animate-fade-in"
-            />
-          </div>
+        <!-- Products Display -->
+        <div
+          v-else
+          :class="[
+            'grid gap-6',
+            viewMode === 'grid'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+              : 'grid-cols-1 max-w-4xl mx-auto',
+          ]"
+        >
+          <ProductItem
+            v-for="product in filteredProducts"
+            :key="product.code"
+            :product="product"
+            @product-added-to-cart="handleProductAdded"
+            class="animate-fade-in"
+          />
         </div>
       </div>
     </main>
@@ -253,316 +314,6 @@ export default {
 </script>
 
 <style scoped>
-.products-page {
-  min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    var(--gray-50) 0%,
-    var(--primary-50) 100%
-  );
-}
-
-/* Hero Section */
-.hero-section {
-  background: var(--gradient-primary);
-  color: white;
-  padding: var(--space-20) 0 var(--space-16);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  opacity: 0.5;
-}
-
-.hero-content {
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.hero-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  margin-bottom: var(--space-6);
-  background: linear-gradient(135deg, white 0%, rgba(255, 255, 255, 0.8) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.2;
-}
-
-.hero-subtitle {
-  font-size: 1.25rem;
-  opacity: 0.9;
-  margin-bottom: var(--space-12);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-}
-
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-12);
-  flex-wrap: wrap;
-}
-
-.stat-item {
-  text-align: center;
-}
-
-.stat-number {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: var(--space-2);
-}
-
-.stat-label {
-  font-size: 0.875rem;
-  opacity: 0.8;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Main Content */
-.main-content {
-  padding: var(--space-16) 0;
-  margin-top: -var(--space-8);
-  position: relative;
-  z-index: 2;
-}
-
-/* Products Header */
-.products-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-6);
-  margin-bottom: var(--space-12);
-  flex-wrap: wrap;
-}
-
-.search-section {
-  flex: 1;
-  max-width: 400px;
-}
-
-.search-box {
-  position: relative;
-}
-
-.search-icon {
-  position: absolute;
-  left: var(--space-4);
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  color: var(--text-secondary);
-}
-
-.search-input {
-  width: 100%;
-  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-12);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface-elevated);
-  font-size: 0.875rem;
-  transition: all var(--transition);
-}
-
-.search-input:focus {
-  border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.filter-section {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.filter-select {
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-elevated);
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: border-color var(--transition);
-}
-
-.filter-select:focus {
-  border-color: var(--primary-500);
-}
-
-.view-toggle {
-  display: flex;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-
-.view-btn {
-  padding: var(--space-2) var(--space-3);
-  border: none;
-  background: var(--surface-elevated);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.view-btn svg {
-  width: 18px;
-  height: 18px;
-}
-
-.view-btn:hover {
-  background: var(--surface);
-  color: var(--text-primary);
-}
-
-.view-btn.active {
-  background: var(--primary-500);
-  color: white;
-}
-
-/* Loading Section */
-.loading-section {
-  padding: var(--space-8) 0;
-}
-
-.loading-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-6);
-}
-
-.skeleton-card {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  box-shadow: var(--shadow);
-}
-
-.skeleton-image {
-  height: 200px;
-  margin-bottom: var(--space-4);
-}
-
-.skeleton-text {
-  height: 16px;
-  margin-bottom: var(--space-3);
-}
-
-.skeleton-text.short {
-  width: 60%;
-}
-
-.skeleton-button {
-  height: 36px;
-  width: 100%;
-  margin-top: var(--space-4);
-}
-
-/* Error Section */
-.error-section {
-  padding: var(--space-16) 0;
-  text-align: center;
-}
-
-.error-content {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.error-icon {
-  width: 64px;
-  height: 64px;
-  color: var(--error-500);
-  margin-bottom: var(--space-6);
-}
-
-.error-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-4);
-}
-
-.error-message {
-  color: var(--text-secondary);
-  margin-bottom: var(--space-8);
-  line-height: 1.6;
-}
-
-.retry-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-/* Empty Section */
-.empty-section {
-  padding: var(--space-16) 0;
-  text-align: center;
-}
-
-.empty-content {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.empty-icon {
-  width: 64px;
-  height: 64px;
-  color: var(--gray-400);
-  margin-bottom: var(--space-6);
-}
-
-.empty-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-4);
-}
-
-.empty-message {
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-/* Products Container */
-.products-container {
-  display: grid;
-  gap: var(--space-6);
-}
-
-.products-container.grid {
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-}
-
-.products-container.list {
-  grid-template-columns: 1fr;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-/* Animations */
 .animate-fade-in {
   animation: fadeIn 0.6s ease-out forwards;
 }
@@ -575,66 +326,6 @@ export default {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.125rem;
-  }
-
-  .hero-stats {
-    gap: var(--space-8);
-  }
-
-  .stat-number {
-    font-size: 2rem;
-  }
-
-  .products-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-section {
-    max-width: none;
-  }
-
-  .filter-section {
-    justify-content: space-between;
-  }
-
-  .main-content {
-    padding: var(--space-12) 0;
-  }
-
-  .products-container.grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-4);
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-stats {
-    flex-direction: column;
-    gap: var(--space-6);
-  }
-
-  .products-container.grid {
-    grid-template-columns: 1fr;
-  }
-
-  .loading-grid {
-    grid-template-columns: 1fr;
   }
 }
 </style>

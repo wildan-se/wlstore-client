@@ -2,32 +2,33 @@ import api from './api'
 
 class AuthService {
   constructor() {
-    this.token = localStorage.getItem('authToken')
+    this.token = localStorage.getItem('token')
   }
 
   async login(credentials) {
-    const response = await api.post('/auth/login', credentials)
+    const response = await api.post('/auth/signin', credentials)
 
-    const { token, user } = response.data
+    const { accessToken, username, email, name, roles } = response.data
 
     // Store auth data
-    localStorage.setItem('authToken', token)
-    localStorage.setItem('userRole', user.role)
-    localStorage.setItem('userEmail', user.email)
-    localStorage.setItem('userName', user.name)
+    localStorage.setItem('token', accessToken)
+    localStorage.setItem('userRole', roles.includes('admin') ? 'admin' : 'user')
+    localStorage.setItem('userEmail', email)
+    localStorage.setItem('userName', name || username)
+    localStorage.setItem('user', JSON.stringify(response.data))
 
-    this.token = token
+    this.token = accessToken
 
     return response.data
   }
 
   async register(userData) {
-    const response = await api.post('/auth/register', userData)
+    const response = await api.post('/auth/signup', userData)
     return response.data
   }
 
   logout() {
-    localStorage.removeItem('authToken')
+    localStorage.removeItem('token')
     localStorage.removeItem('userRole')
     localStorage.removeItem('userEmail')
     localStorage.removeItem('userName')
@@ -41,7 +42,7 @@ class AuthService {
   }
 
   isAuthenticated() {
-    return !!localStorage.getItem('authToken')
+    return !!localStorage.getItem('token')
   }
 
   isLoggedIn() {
@@ -61,43 +62,7 @@ class AuthService {
   }
 
   getToken() {
-    return localStorage.getItem('authToken')
-  }
-
-  // Demo login methods
-  async demoLogin(isAdmin = false) {
-    try {
-      const response = await api.post('/auth/demo-login', {
-        isAdmin: isAdmin,
-      })
-
-      const { accessToken, username, email, roles } = response.data
-
-      // Store auth data
-      localStorage.setItem('authToken', accessToken)
-      localStorage.setItem(
-        'userRole',
-        roles.includes('admin') ? 'admin' : 'user',
-      )
-      localStorage.setItem('userEmail', email)
-      localStorage.setItem('userName', username)
-      localStorage.setItem('user', JSON.stringify(response.data))
-
-      this.token = accessToken
-
-      return response.data
-    } catch (error) {
-      console.error('Demo login failed:', error)
-      throw error
-    }
-  }
-
-  async loginDemo(credentials) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    const isAdmin = credentials.role === 'admin' || credentials.isAdmin
-    return this.demoLogin(isAdmin)
+    return localStorage.getItem('token')
   }
 }
 

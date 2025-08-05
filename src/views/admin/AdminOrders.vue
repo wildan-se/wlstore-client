@@ -1,10 +1,16 @@
 <template>
-  <div class="admin-layout">
+  <div class="flex min-h-screen bg-gray-50">
     <!-- Sidebar -->
-    <aside class="admin-sidebar">
-      <div class="sidebar-header">
-        <div class="logo">
-          <svg viewBox="0 0 24 24" fill="currentColor">
+    <aside
+      class="fixed top-0 left-0 w-72 h-screen bg-white border-r border-gray-200 flex flex-col z-10"
+    >
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-3 font-bold text-gray-900">
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-8 h-8 text-blue-600"
+          >
             <path d="M12 2L2 7L12 12L22 7L12 2Z" />
             <path d="M2 17L12 22L22 17" />
             <path d="M2 12L12 17L22 12" />
@@ -13,20 +19,26 @@
         </div>
       </div>
 
-      <nav class="sidebar-nav">
-        <div class="nav-section">
-          <h3 class="nav-title">Manajemen</h3>
-          <ul class="nav-list">
-            <li class="nav-item">
-              <router-link to="/admin/dashboard" class="nav-link">
-                <svg viewBox="0 0 24 24" fill="none">
+      <nav class="flex-1 p-6 flex flex-col gap-8">
+        <div class="flex flex-col gap-4">
+          <h3
+            class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-0"
+          >
+            Manajemen
+          </h3>
+          <ul class="list-none m-0 p-0 flex flex-col gap-1">
+            <li>
+              <router-link
+                to="/admin/dashboard"
+                class="flex items-center gap-3 px-4 py-3 rounded-md text-gray-600 no-underline font-medium transition-all duration-200 cursor-pointer hover:bg-gray-100 hover:text-gray-900"
+              >
+                <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5 stroke-2">
                   <rect
                     x="3"
                     y="3"
                     width="7"
                     height="9"
                     stroke="currentColor"
-                    stroke-width="2"
                   />
                   <rect
                     x="14"
@@ -34,7 +46,6 @@
                     width="7"
                     height="5"
                     stroke="currentColor"
-                    stroke-width="2"
                   />
                   <rect
                     x="14"
@@ -42,7 +53,6 @@
                     width="7"
                     height="9"
                     stroke="currentColor"
-                    stroke-width="2"
                   />
                   <rect
                     x="3"
@@ -50,47 +60,38 @@
                     width="7"
                     height="5"
                     stroke="currentColor"
-                    stroke-width="2"
                   />
                 </svg>
                 Dashboard
               </router-link>
             </li>
-            <li class="nav-item">
-              <router-link to="/admin/products" class="nav-link">
-                <svg viewBox="0 0 24 24" fill="none">
+            <li>
+              <router-link
+                to="/admin/products"
+                class="flex items-center gap-3 px-4 py-3 rounded-md text-gray-600 no-underline font-medium transition-all duration-200 cursor-pointer hover:bg-gray-100 hover:text-gray-900"
+              >
+                <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5 stroke-2">
                   <path
                     d="M21 16V8C21 7.4 20.6 7 20 7H4C3.4 7 3 7.4 3 8V16C3 16.6 3.4 17 4 17H20C20.6 17 21 16.6 21 16Z"
                     stroke="currentColor"
-                    stroke-width="2"
                   />
-                  <path d="M3 10H21" stroke="currentColor" stroke-width="2" />
+                  <path d="M3 10H21" stroke="currentColor" />
                 </svg>
                 Kelola Produk
               </router-link>
             </li>
-            <li class="nav-item">
-              <router-link to="/admin/orders" class="nav-link active">
-                <svg viewBox="0 0 24 24" fill="none">
+            <li>
+              <router-link
+                to="/admin/orders"
+                class="flex items-center gap-3 px-4 py-3 rounded-md bg-blue-50 text-blue-600 no-underline font-medium transition-all duration-200 cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5 stroke-2">
                   <path
                     d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5"
                     stroke="currentColor"
-                    stroke-width="2"
                   />
-                  <circle
-                    cx="9"
-                    cy="20"
-                    r="1"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
-                  <circle
-                    cx="20"
-                    cy="20"
-                    r="1"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
+                  <circle cx="9" cy="20" r="1" stroke="currentColor" />
+                  <circle cx="20" cy="20" r="1" stroke="currentColor" />
                 </svg>
                 Kelola Pesanan
               </router-link>
@@ -98,23 +99,25 @@
           </ul>
         </div>
 
-        <div class="nav-section">
-          <h3 class="nav-title">Sistem</h3>
-          <ul class="nav-list">
-            <li class="nav-item">
-              <a @click="handleLogout" class="nav-link logout">
-                <svg viewBox="0 0 24 24" fill="none">
+        <div class="flex flex-col gap-4">
+          <h3
+            class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-0"
+          >
+            Sistem
+          </h3>
+          <ul class="list-none m-0 p-0 flex flex-col gap-1">
+            <li>
+              <a
+                @click="handleLogout"
+                class="flex items-center gap-3 px-4 py-3 rounded-md text-red-500 no-underline font-medium transition-all duration-200 cursor-pointer hover:bg-red-50 hover:text-red-600"
+              >
+                <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5 stroke-2">
                   <path
                     d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9"
                     stroke="currentColor"
-                    stroke-width="2"
                   />
-                  <path
-                    d="M16 17L21 12L16 7"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
-                  <path d="M21 12H9" stroke="currentColor" stroke-width="2" />
+                  <path d="M16 17L21 12L16 7" stroke="currentColor" />
+                  <path d="M21 12H9" stroke="currentColor" />
                 </svg>
                 Logout
               </a>
@@ -125,65 +128,66 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="admin-main">
+    <main class="flex-1 ml-72 flex flex-col overflow-hidden">
       <!-- Header -->
-      <header class="admin-header">
-        <div class="header-content">
-          <div class="header-left">
-            <h1 class="page-title">Kelola Pesanan</h1>
-            <p class="page-subtitle">Pantau dan proses pesanan masuk</p>
+      <header class="bg-white border-b border-gray-200 p-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-1">
+              Kelola Pesanan
+            </h1>
+            <p class="text-gray-600 m-0">Pantau dan proses pesanan masuk</p>
           </div>
-          <div class="header-right">
-            <div class="header-stats">
-              <div class="stat-item">
-                <span class="stat-label">Total Pesanan</span>
-                <span class="stat-value">{{ orders.length }}</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">Total Pendapatan</span>
-                <span class="stat-value"
-                  >Rp {{ formatCurrency(totalRevenue) }}</span
-                >
-              </div>
+          <div class="flex gap-6">
+            <div class="flex flex-col items-end">
+              <span class="text-sm text-gray-600">Total Pesanan</span>
+              <span class="text-xl font-bold text-gray-900">{{
+                orders.length
+              }}</span>
+            </div>
+            <div class="flex flex-col items-end">
+              <span class="text-sm text-gray-600">Total Pendapatan</span>
+              <span class="text-xl font-bold text-gray-900"
+                >Rp {{ formatCurrency(totalRevenue) }}</span
+              >
             </div>
           </div>
         </div>
       </header>
 
       <!-- Content -->
-      <div class="admin-content">
+      <div class="flex-1 p-6 overflow-auto">
         <!-- Filters -->
-        <div class="filters-section">
-          <div class="filters-group">
-            <div class="filter-item">
-              <label class="filter-label">Cari Pesanan</label>
-              <div class="search-input">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none">
-                  <circle
-                    cx="11"
-                    cy="11"
-                    r="8"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M21 21L16.65 16.65"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
+        <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+          <div class="flex gap-4 items-end flex-wrap">
+            <div class="flex flex-col gap-2 min-w-[200px]">
+              <label class="text-sm font-medium text-gray-900"
+                >Cari Pesanan</label
+              >
+              <div class="relative">
+                <svg
+                  class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 stroke-2"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <circle cx="11" cy="11" r="8" stroke="currentColor" />
+                  <path d="M21 21L16.65 16.65" stroke="currentColor" />
                 </svg>
                 <input
                   v-model="searchQuery"
                   type="text"
-                  placeholder="Cari berdasarkan ID pesanan atau nama pelanggan..."
-                  class="search-field"
+                  placeholder="Cari ID / Pelanggan"
+                  class="w-full pl-11 pr-3 py-3 border border-gray-200 rounded-md text-sm transition-all duration-200 focus:outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-50"
                 />
               </div>
             </div>
 
-            <div class="filter-item">
-              <label class="filter-label">Status</label>
-              <select v-model="statusFilter" class="filter-select">
+            <div class="flex flex-col gap-2 min-w-[200px]">
+              <label class="text-sm font-medium text-gray-900">Status</label>
+              <select
+                v-model="statusFilter"
+                class="px-3 py-3 border border-gray-200 rounded-md text-sm bg-white transition-all duration-200 text-gray-900 focus:outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-50"
+              >
                 <option value="">Semua Status</option>
                 <option value="pending">Menunggu</option>
                 <option value="processing">Diproses</option>
@@ -193,9 +197,14 @@
               </select>
             </div>
 
-            <div class="filter-item">
-              <label class="filter-label">Rentang Tanggal</label>
-              <select v-model="dateFilter" class="filter-select">
+            <div class="flex flex-col gap-2 min-w-[200px]">
+              <label class="text-sm font-medium text-gray-900"
+                >Rentang Tanggal</label
+              >
+              <select
+                v-model="dateFilter"
+                class="px-3 py-3 border border-gray-200 rounded-md text-sm bg-white transition-all duration-200 text-gray-900 focus:outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-50"
+              >
                 <option value="">Semua Waktu</option>
                 <option value="today">Hari Ini</option>
                 <option value="week">Minggu Ini</option>
@@ -204,8 +213,11 @@
               </select>
             </div>
 
-            <button @click="clearFilters" class="clear-filters-btn">
-              <svg viewBox="0 0 24 24" fill="none">
+            <button
+              @click="clearFilters"
+              class="flex items-center gap-2 px-4 py-3 bg-gray-100 border border-gray-200 rounded-md text-black cursor-pointer transition-all duration-200 h-fit hover:bg-gray-200"
+            >
+              <svg viewBox="0 0 24 24" fill="none" class="w-4 h-4">
                 <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" />
                 <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" />
               </svg>
@@ -215,18 +227,49 @@
         </div>
 
         <!-- Orders Table -->
-        <div class="table-section">
-          <div class="table-container">
-            <table class="orders-table" v-if="filteredOrders.length > 0">
+        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table
+              class="w-full border-collapse"
+              v-if="filteredOrders.length > 0"
+            >
               <thead>
                 <tr>
-                  <th>ID Pesanan</th>
-                  <th>Pelanggan</th>
-                  <th>Produk</th>
-                  <th>Tanggal</th>
-                  <th>Total</th>
-                  <th>Status</th>
-                  <th>Aksi</th>
+                  <th
+                    class="bg-gray-50 px-4 py-4 text-left font-semibold text-black border-b border-gray-200 text-sm"
+                  >
+                    ID Pesanan
+                  </th>
+                  <th
+                    class="bg-gray-50 px-4 py-4 text-left font-semibold text-black border-b border-gray-200 text-sm"
+                  >
+                    Pelanggan
+                  </th>
+                  <th
+                    class="bg-gray-50 px-4 py-4 text-left font-semibold text-black border-b border-gray-200 text-sm"
+                  >
+                    Produk
+                  </th>
+                  <th
+                    class="bg-gray-50 px-4 py-4 text-left font-semibold text-black border-b border-gray-200 text-sm"
+                  >
+                    Tanggal
+                  </th>
+                  <th
+                    class="bg-gray-50 px-4 py-4 text-left font-semibold text-black border-b border-gray-200 text-sm"
+                  >
+                    Total
+                  </th>
+                  <th
+                    class="bg-gray-50 px-4 py-4 text-left font-semibold text-black border-b border-gray-200 text-sm"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="bg-gray-50 px-4 py-4 text-left font-semibold text-black border-b border-gray-200 text-sm"
+                  >
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -235,29 +278,30 @@
                   :key="order.id"
                   class="order-row"
                 >
-                  <td>
-                    <span class="order-id">#{{ order.id }}</span>
+                  <td class="px-4 py-4 border-b border-gray-200 text-sm">
+                    <span class="font-semibold text-blue-600"
+                      >#{{ order.id }}</span
+                    >
                   </td>
-                  <td>
-                    <div class="customer-info">
-                      <span class="customer-name">{{
+                  <td class="px-4 py-4 border-b border-gray-200 text-sm">
+                    <div class="flex flex-col gap-1">
+                      <span class="font-medium text-gray-900">{{
                         order.customerName
                       }}</span>
-                      <span class="customer-email">{{
+                      <span class="text-gray-600 text-xs">{{
                         order.customerEmail
                       }}</span>
                     </div>
                   </td>
-                  <td>
-                    <div class="products-info">
-                      <span class="products-count"
+                  <td class="px-4 py-4 border-b border-gray-200 text-sm">
+                    <div class="flex flex-col gap-1">
+                      <span class="font-medium text-gray-900"
                         >{{ order.items.length }} item(s)</span
                       >
-                      <div class="products-preview">
+                      <div class="text-gray-600 text-xs">
                         <span
                           v-for="(item, index) in order.items.slice(0, 2)"
                           :key="index"
-                          class="product-name"
                         >
                           {{ item.name
                           }}{{
@@ -268,68 +312,73 @@
                         </span>
                         <span
                           v-if="order.items.length > 2"
-                          class="more-products"
+                          class="text-gray-600 italic"
                         >
                           +{{ order.items.length - 2 }} more
                         </span>
                       </div>
                     </div>
                   </td>
-                  <td>
-                    <div class="date-info">
-                      <span class="order-date">{{
+                  <td class="px-4 py-4 border-b border-gray-200 text-sm">
+                    <div class="flex flex-col gap-1">
+                      <span class="font-medium text-gray-900">{{
                         formatDate(order.date)
                       }}</span>
-                      <span class="order-time">{{
+                      <span class="text-gray-600 text-xs">{{
                         formatTime(order.date)
                       }}</span>
                     </div>
                   </td>
-                  <td>
-                    <span class="order-amount"
+                  <td class="px-4 py-4 border-b border-gray-200 text-sm">
+                    <span class="font-semibold text-gray-900"
                       >Rp {{ formatCurrency(order.total) }}</span
                     >
                   </td>
-                  <td>
-                    <span :class="['status-badge', order.status.toLowerCase()]">
+                  <td class="px-4 py-4 border-b border-gray-200 text-sm">
+                    <span
+                      :class="[
+                        'status-badge',
+                        order.status.toLowerCase(),
+                        'px-3 py-1 rounded-full text-xs font-medium capitalize',
+                      ]"
+                    >
                       {{ order.status }}
                     </span>
                   </td>
-                  <td>
-                    <div class="actions-group">
+                  <td class="px-4 py-4 border-b border-gray-200 text-sm">
+                    <div class="flex gap-2">
                       <button
                         @click="viewOrder(order)"
-                        class="action-btn view-btn"
+                        class="w-8 h-8 rounded-md border border-gray-200 bg-white flex items-center justify-center cursor-pointer transition-all duration-200 text-sky-600 hover:bg-sky-50 hover:border-sky-600"
                       >
-                        <svg viewBox="0 0 24 24" fill="none">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          class="w-4 h-4 stroke-2"
+                        >
                           <path
                             d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z"
                             stroke="currentColor"
-                            stroke-width="2"
                           />
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="3"
-                            stroke="currentColor"
-                            stroke-width="2"
-                          />
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" />
                         </svg>
                       </button>
                       <button
                         @click="updateOrderStatus(order)"
-                        class="action-btn edit-btn"
+                        class="w-8 h-8 rounded-md border border-gray-200 bg-white flex items-center justify-center cursor-pointer transition-all duration-200 text-amber-600 hover:bg-amber-50 hover:border-amber-600"
                       >
-                        <svg viewBox="0 0 24 24" fill="none">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          class="w-4 h-4 stroke-2"
+                        >
                           <path
                             d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13"
                             stroke="currentColor"
-                            stroke-width="2"
                           />
                           <path
                             d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z"
                             stroke="currentColor"
-                            stroke-width="2"
                           />
                         </svg>
                       </button>
@@ -340,8 +389,12 @@
             </table>
 
             <!-- Empty State -->
-            <div v-else class="empty-state">
-              <svg viewBox="0 0 24 24" fill="none">
+            <div v-else class="text-center py-8 text-gray-600">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                class="w-16 h-16 mb-4 mx-auto stroke-current"
+              >
                 <path
                   d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5"
                   stroke="currentColor"
@@ -362,8 +415,8 @@
                   stroke-width="2"
                 />
               </svg>
-              <h3>Belum Ada Pesanan</h3>
-              <p>
+              <h3 class="mb-2 text-gray-900 m-0">Belum Ada Pesanan</h3>
+              <p class="m-0">
                 {{
                   searchQuery || statusFilter || dateFilter
                     ? 'Tidak ada pesanan yang sesuai dengan filter.'
@@ -376,17 +429,17 @@
           <!-- Pagination -->
           <div
             v-if="filteredOrders.length > 0 && totalPages > 1"
-            class="pagination"
+            class="flex justify-between items-center px-6 py-4 border-t border-gray-200 bg-gray-50"
           >
             <button
               @click="currentPage = Math.max(1, currentPage - 1)"
               :disabled="currentPage === 1"
-              class="pagination-btn"
+              class="px-4 py-2 border border-gray-200 rounded-md bg-white text-gray-900 cursor-pointer transition-all duration-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Sebelumnya
             </button>
 
-            <div class="pagination-info">
+            <div class="text-sm text-gray-600">
               Halaman {{ currentPage }} dari {{ totalPages }} ({{
                 filteredOrders.length
               }}
@@ -396,7 +449,7 @@
             <button
               @click="currentPage = Math.min(totalPages, currentPage + 1)"
               :disabled="currentPage === totalPages"
-              class="pagination-btn"
+              class="px-4 py-2 border border-gray-200 rounded-md bg-white text-gray-900 cursor-pointer transition-all duration-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Selanjutnya
             </button>
@@ -406,100 +459,140 @@
     </main>
 
     <!-- Order Detail Modal -->
-    <div v-if="selectedOrder" class="modal-overlay" @click="closeModal">
-      <div class="modal-content" @click.stop>
-        <div class="modal-header">
-          <h3>Detail Pesanan - #{{ selectedOrder.id }}</h3>
-          <button @click="closeModal" class="modal-close">
-            <svg viewBox="0 0 24 24" fill="none">
+    <div
+      v-if="selectedOrder"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      @click="closeModal"
+    >
+      <div
+        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[80vh] overflow-auto"
+        @click.stop
+      >
+        <div
+          class="flex justify-between items-center p-6 border-b border-gray-200"
+        >
+          <h3 class="m-0 text-xl font-semibold text-gray-900">
+            Detail Pesanan - #{{ selectedOrder.id }}
+          </h3>
+          <button
+            @click="closeModal"
+            class="w-8 h-8 border-none bg-none rounded-md flex items-center justify-center cursor-pointer text-gray-600 transition-all duration-200 hover:bg-gray-100 hover:text-gray-900"
+          >
+            <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5">
               <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" />
               <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" />
             </svg>
           </button>
         </div>
 
-        <div class="modal-body">
-          <div class="order-details-grid">
-            <div class="detail-section">
-              <h4>Informasi Pelanggan</h4>
-              <div class="detail-item">
-                <span class="detail-label">Nama:</span>
-                <span class="detail-value">{{
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="flex flex-col gap-4">
+              <h4
+                class="m-0 text-base font-semibold text-gray-900 border-b border-gray-200 pb-2"
+              >
+                Informasi Pelanggan
+              </h4>
+              <div class="flex justify-between items-center gap-4">
+                <span class="font-medium text-gray-600">Nama:</span>
+                <span class="text-gray-900">{{
                   selectedOrder.customerName
                 }}</span>
               </div>
-              <div class="detail-item">
-                <span class="detail-label">Email:</span>
-                <span class="detail-value">{{
+              <div class="flex justify-between items-center gap-4">
+                <span class="font-medium text-gray-600">Email:</span>
+                <span class="text-gray-900">{{
                   selectedOrder.customerEmail
                 }}</span>
               </div>
-              <div class="detail-item">
-                <span class="detail-label">Telepon:</span>
-                <span class="detail-value">{{
+              <div class="flex justify-between items-center gap-4">
+                <span class="font-medium text-gray-600">Telepon:</span>
+                <span class="text-gray-900">{{
                   selectedOrder.customerPhone || 'Tidak Ada'
                 }}</span>
               </div>
             </div>
 
-            <div class="detail-section">
-              <h4>Informasi Pesanan</h4>
-              <div class="detail-item">
-                <span class="detail-label">Tanggal:</span>
-                <span class="detail-value"
+            <div class="flex flex-col gap-4">
+              <h4
+                class="m-0 text-base font-semibold text-gray-900 border-b border-gray-200 pb-2"
+              >
+                Informasi Pesanan
+              </h4>
+              <div class="flex justify-between items-center gap-4">
+                <span class="font-medium text-gray-600">Tanggal:</span>
+                <span class="text-gray-900"
                   >{{ formatDate(selectedOrder.date) }}
                   {{ formatTime(selectedOrder.date) }}</span
                 >
               </div>
-              <div class="detail-item">
-                <span class="detail-label">Status:</span>
+              <div class="flex justify-between items-center gap-4">
+                <span class="font-medium text-gray-600">Status:</span>
                 <span
-                  :class="['status-badge', selectedOrder.status.toLowerCase()]"
+                  :class="[
+                    'status-badge',
+                    selectedOrder.status.toLowerCase(),
+                    'px-3 py-1 rounded-full text-xs font-medium capitalize',
+                  ]"
                   >{{ getStatusText(selectedOrder.status) }}</span
                 >
               </div>
-              <div class="detail-item">
-                <span class="detail-label">Total:</span>
-                <span class="detail-value"
+              <div class="flex justify-between items-center gap-4">
+                <span class="font-medium text-gray-600">Total:</span>
+                <span class="text-gray-900"
                   >Rp {{ formatCurrency(selectedOrder.total) }}</span
                 >
               </div>
             </div>
           </div>
 
-          <div class="detail-section">
-            <h4>Item Pesanan</h4>
-            <div class="order-items">
+          <div class="flex flex-col gap-4">
+            <h4
+              class="m-0 text-base font-semibold text-gray-900 border-b border-gray-200 pb-2"
+            >
+              Item Pesanan
+            </h4>
+            <div class="flex flex-col gap-3">
               <div
                 v-for="item in selectedOrder.items"
                 :key="item.id"
-                class="order-item"
+                class="flex justify-between items-center p-3 border border-gray-200 rounded-md"
               >
-                <div class="item-info">
-                  <span class="item-name">{{ item.name }}</span>
-                  <span class="item-details"
+                <div class="flex flex-col gap-1">
+                  <span class="font-medium text-gray-900">{{ item.name }}</span>
+                  <span class="text-sm text-gray-600"
                     >{{ item.quantity }}x @ Rp
                     {{ formatCurrency(item.price) }}</span
                   >
                 </div>
-                <div class="item-total">
+                <div class="font-semibold text-gray-900">
                   Rp {{ formatCurrency(item.quantity * item.price) }}
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="detail-section">
-            <h4>Perbarui Status</h4>
-            <div class="status-update">
-              <select v-model="updatedStatus" class="status-select">
+          <div class="flex flex-col gap-4 mt-6">
+            <h4
+              class="m-0 text-base font-semibold text-gray-900 border-b border-gray-200 pb-2"
+            >
+              Perbarui Status
+            </h4>
+            <div class="flex gap-3 items-center">
+              <select
+                v-model="updatedStatus"
+                class="flex-1 px-3 py-3 border border-gray-200 rounded-md text-sm bg-white"
+              >
                 <option value="pending">Menunggu</option>
                 <option value="processing">Diproses</option>
                 <option value="shipped">Dikirim</option>
                 <option value="delivered">Terkirim</option>
                 <option value="cancelled">Dibatalkan</option>
               </select>
-              <button @click="saveStatusUpdate" class="save-status-btn">
+              <button
+                @click="saveStatusUpdate"
+                class="px-4 py-3 bg-blue-600 text-white border-none rounded-md font-medium cursor-pointer transition-all duration-200 hover:bg-blue-700"
+              >
                 Perbarui Status
               </button>
             </div>
@@ -797,726 +890,77 @@ export default {
 </script>
 
 <style scoped>
-/* Import the same CSS variables as AdminDashboard.vue */
-:root {
-  --primary-50: #eff6ff;
-  --primary-100: #dbeafe;
-  --primary-600: #2563eb;
-  --success-50: #f0fdf4;
-  --success-600: #16a34a;
-  --warning-50: #fffbeb;
-  --warning-600: #d97706;
-  --info-50: #f0f9ff;
-  --info-600: #0891b2;
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-200: #e5e7eb;
-  --gray-300: #d1d5db;
-  --gray-400: #9ca3af;
-  --gray-500: #6b7280;
-  --gray-600: #4b5563;
-  --gray-700: #374151;
-  --gray-800: #1f2937;
-  --gray-900: #111827;
-  --surface-elevated: #ffffff;
-  --border: var(--gray-200);
-  --text-primary: var(--gray-900);
-  --text-secondary: var(--gray-600);
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-}
+/* Minimal custom CSS - 98% replaced with Tailwind + DaisyUI */
 
-.admin-layout {
-  display: flex;
-  min-height: 100vh;
-  background: var(--gray-50);
-}
-
-/* Sidebar - Same as AdminDashboard.vue */
-.admin-sidebar {
-  width: 280px;
-  background: var(--surface-elevated);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar-header {
-  padding: var(--space-6);
-  border-bottom: 1px solid var(--border);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.logo svg {
-  width: 32px;
-  height: 32px;
-  color: var(--primary-600);
-}
-
-.sidebar-nav {
-  flex: 1;
-  padding: var(--space-6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-}
-
-.nav-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.nav-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-.nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
-
-.nav-link:hover {
-  background: var(--gray-100);
-  color: var(--text-primary);
-}
-
-.nav-link.active {
-  background: var(--primary-50);
-  color: var(--primary-600);
-}
-
-.nav-link svg {
-  width: 20px;
-  height: 20px;
-  stroke-width: 2;
-}
-
-.nav-link.logout {
-  color: #ef4444;
-}
-
-.nav-link.logout:hover {
-  background: #fef2f2;
-  color: #dc2626;
-}
-
-/* Main Content */
-.admin-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.admin-header {
-  background: var(--surface-elevated);
-  border-bottom: 1px solid var(--border);
-  padding: var(--space-6);
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.page-title {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 var(--space-1) 0;
-}
-
-.page-subtitle {
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-.header-stats {
-  display: flex;
-  gap: var(--space-6);
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.stat-label {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.stat-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.admin-content {
-  flex: 1;
-  padding: var(--space-6);
-  overflow: auto;
-}
-
-/* Filters */
-.filters-section {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  padding: var(--space-6);
-  margin-bottom: var(--space-6);
-}
-
-.filters-group {
-  display: flex;
-  gap: var(--space-4);
-  align-items: end;
-  flex-wrap: wrap;
-}
-
-.filter-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  min-width: 200px;
-}
-
-.filter-label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.search-input {
-  position: relative;
-}
-
-.search-icon {
-  position: absolute;
-  left: var(--space-3);
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  color: var(--text-secondary);
-  stroke-width: 2;
-}
-
-.search-field {
-  width: 100%;
-  padding: var(--space-3) var(--space-3) var(--space-3) 2.75rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
-}
-
-.search-field:focus {
-  outline: none;
-  border-color: var(--primary-600);
-  box-shadow: 0 0 0 3px var(--primary-50);
-}
-
-.filter-select {
-  padding: var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  background: var(--surface-elevated);
-  transition: all 0.2s ease;
-}
-
-.filter-select:focus {
-  outline: none;
-  border-color: var(--primary-600);
-  box-shadow: 0 0 0 3px var(--primary-50);
-}
-
-.clear-filters-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  background: var(--gray-100);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  height: fit-content;
-}
-
-.clear-filters-btn:hover {
-  background: var(--gray-200);
-  color: var(--text-primary);
-}
-
-.clear-filters-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Table */
-.table-section {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  overflow: hidden;
-}
-
-.table-container {
-  overflow-x: auto;
-}
-
-.orders-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.orders-table th {
-  background: var(--gray-50);
-  padding: var(--space-4);
-  text-align: left;
-  font-weight: 600;
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border);
-  font-size: 0.875rem;
-}
-
-.orders-table td {
-  padding: var(--space-4);
-  border-bottom: 1px solid var(--border);
-  font-size: 0.875rem;
-}
-
+/* Enhanced hover effects for orders table */
 .order-row:hover {
-  background: var(--gray-50);
+  background-color: rgb(249 250 251);
 }
 
-.order-id {
-  font-weight: 600;
-  color: var(--primary-600);
-}
-
-.customer-info {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.customer-name {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.customer-email {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-}
-
-.products-info {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.products-count {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.products-preview {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-}
-
-.more-products {
-  color: var(--text-secondary);
-  font-style: italic;
-}
-
-.date-info {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.order-date {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.order-time {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-}
-
-.order-amount {
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.status-badge {
-  padding: var(--space-1) var(--space-3);
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
+/* Custom status badge colors not available in DaisyUI */
 .status-badge.pending {
-  background: var(--warning-50);
-  color: var(--warning-600);
+  background: rgb(254 249 195);
+  color: rgb(217 119 6);
 }
 
 .status-badge.processing {
-  background: var(--info-50);
-  color: var(--info-600);
+  background: rgb(240 249 255);
+  color: rgb(8 145 178);
 }
 
 .status-badge.shipped {
-  background: var(--primary-50);
-  color: var(--primary-600);
+  background: rgb(239 246 255);
+  color: rgb(37 99 235);
 }
 
 .status-badge.delivered {
-  background: var(--success-50);
-  color: var(--success-600);
+  background: rgb(240 253 244);
+  color: rgb(22 163 74);
 }
 
 .status-badge.cancelled {
-  background: #fef2f2;
-  color: #dc2626;
+  background: rgb(254 242 242);
+  color: rgb(220 38 38);
 }
 
-.actions-group {
-  display: flex;
-  gap: var(--space-2);
+/* Active status indicator animation */
+.status-dot.active {
+  animation: pulse 2s infinite;
 }
 
-.action-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: var(--surface-elevated);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
   transition: all 0.2s ease;
 }
 
-.action-btn:hover {
-  background: var(--gray-50);
-}
-
-.action-btn svg {
-  width: 16px;
-  height: 16px;
-  stroke-width: 2;
-}
-
-.view-btn {
-  color: var(--info-600);
-}
-
-.view-btn:hover {
-  background: var(--info-50);
-  border-color: var(--info-600);
-}
-
-.edit-btn {
-  color: var(--warning-600);
-}
-
-.edit-btn:hover {
-  background: var(--warning-50);
-  border-color: var(--warning-600);
-}
-
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: var(--space-8);
-  color: var(--text-secondary);
-}
-
-.empty-state svg {
-  width: 64px;
-  height: 64px;
-  margin-bottom: var(--space-4);
-  stroke: currentColor;
-}
-
-.empty-state h3 {
-  margin: 0 0 var(--space-2) 0;
-  color: var(--text-primary);
-}
-
-.empty-state p {
-  margin: 0;
-}
-
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-4) var(--space-6);
-  border-top: 1px solid var(--border);
-  background: var(--gray-50);
-}
-
-.pagination-btn {
-  padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface-elevated);
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.pagination-btn:hover:not(:disabled) {
-  background: var(--gray-50);
-}
-
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pagination-info {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: var(--space-4);
-}
-
-.modal-content {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  width: 100%;
-  max-width: 600px;
-  max-height: 80vh;
-  overflow: auto;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-6);
-  border-bottom: 1px solid var(--border);
-}
-
-.modal-header h3 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.modal-close {
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: none;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
-}
-
-.modal-close:hover {
-  background: var(--gray-100);
-  color: var(--text-primary);
-}
-
-.modal-close svg {
-  width: 20px;
-  height: 20px;
-}
-
-.modal-body {
-  padding: var(--space-6);
-}
-
-.order-details-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-6);
-  margin-bottom: var(--space-6);
-}
-
-.detail-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.detail-section h4 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border);
-  padding-bottom: var(--space-2);
-}
-
-.detail-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.detail-label {
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-.detail-value {
-  color: var(--text-primary);
-}
-
-.order-items {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.order-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-}
-
-.item-info {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.item-name {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.item-details {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.item-total {
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.status-update {
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
-}
-
-.status-select {
-  flex: 1;
-  padding: var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  background: var(--surface-elevated);
-}
-
-.save-status-btn {
-  padding: var(--space-3) var(--space-4);
-  background: var(--primary-600);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.save-status-btn:hover {
-  background: var(--primary-700);
-}
-
-/* Responsive */
+/* Responsive layout for mobile */
 @media (max-width: 1024px) {
-  .admin-sidebar {
-    width: 240px;
+  .admin-layout .ml-72 {
+    margin-left: 0;
   }
 
+  .admin-layout .w-72 {
+    width: 100%;
+    position: relative;
+    height: auto;
+  }
+
+  .admin-layout {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
   .filters-group {
     flex-direction: column;
     align-items: stretch;
@@ -1524,21 +968,6 @@ export default {
 
   .filter-item {
     min-width: auto;
-  }
-}
-
-@media (max-width: 768px) {
-  .admin-layout {
-    flex-direction: column;
-  }
-
-  .admin-sidebar {
-    width: 100%;
-    height: auto;
-  }
-
-  .admin-content {
-    padding: var(--space-4);
   }
 
   .table-container {
@@ -1551,11 +980,7 @@ export default {
 
   .pagination {
     flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .modal-overlay {
-    padding: var(--space-2);
+    gap: 0.5rem;
   }
 
   .order-details-grid {

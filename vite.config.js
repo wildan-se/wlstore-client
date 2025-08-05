@@ -13,5 +13,9 @@ export default defineConfig({
   server: {
     host: '0.0.0.0', // Ganti dengan IP atau hostname yang diinginkan
     port: 5173, // Ganti dengan port yang Anda inginkan
+    force: true, // Force refresh dependencies
+  },
+  optimizeDeps: {
+    force: true, // Force refresh dependencies
   },
 })

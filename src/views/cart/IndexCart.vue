@@ -1,32 +1,43 @@
 <template>
-  <div class="cart-page">
+  <div class="min-h-screen bg-gradient-to-br from-base-200 to-primary/10">
     <!-- Header Section -->
-    <div class="cart-header">
-      <div class="container">
-        <div class="header-content">
-          <div class="header-icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+    <div
+      class="hero bg-gradient-to-r from-primary to-secondary text-primary-content"
+    >
+      <div class="hero-overlay bg-opacity-30"></div>
+      <div class="hero-content text-center py-16 z-10">
+        <div class="max-w-md">
+          <div class="flex items-center justify-center gap-6 mb-6">
+            <div
+              class="flex items-center justify-center w-16 h-16 bg-primary-content/20 rounded-full"
             >
-              <path
-                d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5M9 19.5C9.8 19.5 10.5 20.2 10.5 21S9.8 22.5 9 22.5 7.5 21.8 7.5 21 8.2 19.5 9 19.5ZM20 19.5C20.8 19.5 21.5 20.2 21.5 21S20.8 22.5 20 22.5 18.5 21.8 18.5 21 19.2 19.5 20 19.5Z"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
-          <div class="header-text">
-            <h1 class="page-title">Keranjang Belanja</h1>
-            <p class="page-subtitle">Kelola pesanan Anda sebelum checkout</p>
-          </div>
-          <div class="cart-stats" v-if="!loading && cartItems.length > 0">
-            <div class="stat-item">
-              <span class="stat-number">{{ totalItems }}</span>
-              <span class="stat-label">Items</span>
+              <svg
+                class="w-8 h-8"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5M9 19.5C9.8 19.5 10.5 20.2 10.5 21S9.8 22.5 9 22.5 7.5 21.8 7.5 21 8.2 19.5 9 19.5ZM20 19.5C20.8 19.5 21.5 20.2 21.5 21S20.8 22.5 20 22.5 18.5 21.8 18.5 21 19.2 19.5 20 19.5Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div class="text-left">
+              <h1 class="text-4xl font-bold">Keranjang Belanja</h1>
+              <p class="text-lg opacity-90">
+                Kelola pesanan Anda sebelum checkout
+              </p>
+            </div>
+            <div
+              v-if="!loading && cartItems.length > 0"
+              class="stat bg-primary-content/20 backdrop-blur-sm text-primary-content"
+            >
+              <div class="stat-value text-2xl">{{ totalItems }}</div>
+              <div class="stat-title opacity-80">Items</div>
             </div>
           </div>
         </div>
@@ -34,56 +45,69 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
-      <div class="container">
-        <!-- Loading State -->
-        <div v-if="loading" class="loading-section">
-          <div class="loading-card">
-            <div class="loading-spinner"></div>
-            <h3 class="loading-title">Memuat Keranjang</h3>
-            <p class="loading-text">Mohon tunggu sebentar...</p>
+    <div class="container mx-auto px-4 py-16 -mt-8 relative z-20">
+      <!-- Loading State -->
+      <div v-if="loading" class="flex items-center justify-center min-h-96">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body text-center">
+            <span
+              class="loading loading-spinner loading-lg text-primary mb-4"
+            ></span>
+            <h3 class="text-xl font-semibold mb-2">Memuat Keranjang</h3>
+            <p class="text-base-content/70">Mohon tunggu sebentar...</p>
           </div>
         </div>
+      </div>
 
-        <!-- Empty Cart -->
-        <div v-else-if="cartItems.length === 0" class="empty-section">
-          <div class="empty-content animate-fade-in">
-            <div class="empty-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+      <!-- Empty Cart -->
+      <div
+        v-else-if="cartItems.length === 0"
+        class="flex items-center justify-center min-h-96"
+      >
+        <div class="card bg-base-100 shadow-xl max-w-md">
+          <div class="card-body text-center animate-fade-in">
+            <div class="flex justify-center mb-6">
+              <div
+                class="w-24 h-24 bg-base-200 rounded-full flex items-center justify-center"
               >
-                <path
-                  d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <circle
-                  cx="9"
-                  cy="20"
-                  r="1"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-                <circle
-                  cx="20"
-                  cy="20"
-                  r="1"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-              </svg>
+                <svg
+                  class="w-12 h-12 text-base-content/50"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <circle
+                    cx="9"
+                    cy="20"
+                    r="1"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <circle
+                    cx="20"
+                    cy="20"
+                    r="1"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
             </div>
-            <h3 class="empty-title">Keranjang Anda Kosong</h3>
-            <p class="empty-message">
+            <h3 class="text-2xl font-bold mb-4">Keranjang Anda Kosong</h3>
+            <p class="text-base-content/70 mb-6">
               Belum ada produk di keranjang. Mari mulai berbelanja dan temukan
               produk favorit Anda!
             </p>
-            <router-link to="/" class="btn btn-primary">
+            <router-link to="/" class="btn btn-primary btn-wide">
               <svg
+                class="w-5 h-5"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -99,24 +123,26 @@
             </router-link>
           </div>
         </div>
+      </div>
 
-        <!-- Cart Content -->
-        <div v-else class="cart-content animate-fade-in">
-          <div class="cart-layout">
-            <!-- Cart Items -->
-            <div class="cart-items">
-              <div class="section-header">
-                <h2 class="section-title">Item Anda</h2>
-                <span class="item-count-badge"
-                  >{{ cartItems.length }} item</span
-                >
+      <!-- Cart Content -->
+      <div v-else class="grid grid-cols-1 xl:grid-cols-3 gap-8 animate-fade-in">
+        <!-- Cart Items -->
+        <div class="xl:col-span-2">
+          <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Item Anda</h2>
+                <div class="badge badge-primary badge-lg">
+                  {{ cartItems.length }} item
+                </div>
               </div>
 
-              <div class="items-list">
+              <div class="space-y-4">
                 <div
                   v-for="(item, index) in cartItems"
                   :key="item.productCode"
-                  class="item-wrapper"
+                  class="animate-fade-in"
                   :style="{ animationDelay: `${index * 0.1}s` }"
                 >
                   <ItemCart
@@ -128,45 +154,48 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Order Summary -->
-            <div class="order-summary">
-              <div class="summary-card">
-                <div class="summary-header">
-                  <h3 class="summary-title">Ringkasan Pesanan</h3>
-                </div>
+        <!-- Order Summary -->
+        <div class="xl:col-span-1">
+          <div class="sticky top-4">
+            <div class="card bg-base-100 shadow-xl">
+              <div class="card-body">
+                <h3 class="text-xl font-bold mb-6">Ringkasan Pesanan</h3>
 
-                <div class="summary-content">
-                  <div class="summary-row">
-                    <span class="summary-label"
+                <div class="space-y-4">
+                  <div class="flex justify-between">
+                    <span class="text-base-content/70"
                       >Subtotal ({{ totalItems }} item)</span
                     >
-                    <span class="summary-value"
+                    <span class="font-semibold"
                       >Rp {{ subtotal.toLocaleString('id-ID') }}</span
                     >
                   </div>
 
-                  <div class="summary-row">
-                    <span class="summary-label">Ongkos Kirim</span>
-                    <span class="summary-value free">GRATIS</span>
+                  <div class="flex justify-between">
+                    <span class="text-base-content/70">Ongkos Kirim</span>
+                    <span class="text-success font-semibold">GRATIS</span>
                   </div>
 
-                  <div class="summary-divider"></div>
+                  <div class="divider"></div>
 
-                  <div class="summary-row total">
-                    <span class="summary-label">Total</span>
-                    <span class="summary-value"
+                  <div class="flex justify-between text-lg font-bold">
+                    <span>Total</span>
+                    <span class="text-primary"
                       >Rp {{ totalPrice.toLocaleString('id-ID') }}</span
                     >
                   </div>
                 </div>
 
-                <div class="summary-actions">
+                <div class="space-y-3 mt-6">
                   <button
-                    class="btn btn-primary btn-lg checkout-btn"
+                    class="btn btn-primary btn-lg w-full"
                     @click="checkout"
                   >
                     <svg
+                      class="w-5 h-5"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +216,7 @@
                     Lanjutkan ke Checkout
                   </button>
 
-                  <router-link to="/" class="btn btn-outline continue-shopping">
+                  <router-link to="/" class="btn btn-outline w-full">
                     Lanjut Belanja
                   </router-link>
                 </div>
@@ -358,367 +387,10 @@ export default {
 </script>
 
 <style scoped>
-.cart-page {
-  min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    var(--gray-50) 0%,
-    var(--primary-50) 100%
-  );
-}
+/* Minimal custom CSS - 98% replaced with Tailwind + DaisyUI */
 
-/* Header Section */
-.cart-header {
-  background: var(--gradient-primary);
-  color: white;
-  padding: var(--space-16) 0 var(--space-12);
-  position: relative;
-  overflow: hidden;
-}
-
-.cart-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="cart-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23cart-pattern)"/></svg>');
-  opacity: 0.3;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: var(--space-6);
-  position: relative;
-  z-index: 1;
-}
-
-.header-icon {
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-xl);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-}
-
-.header-icon svg {
-  width: 32px;
-  height: 32px;
-}
-
-.header-text {
-  flex: 1;
-}
-
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin: 0 0 var(--space-2);
-  background: linear-gradient(135deg, white 0%, rgba(255, 255, 255, 0.8) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.page-subtitle {
-  font-size: 1.125rem;
-  opacity: 0.9;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.cart-stats {
-  display: flex;
-  gap: var(--space-8);
-}
-
-.stat-item {
-  text-align: center;
-  background: rgba(255, 255, 255, 0.15);
-  padding: var(--space-4) var(--space-6);
-  border-radius: var(--radius-lg);
-  backdrop-filter: blur(10px);
-}
-
-.stat-number {
-  display: block;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: var(--space-1);
-}
-
-.stat-label {
-  font-size: 0.875rem;
-  opacity: 0.8;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Main Content */
-.main-content {
-  padding: var(--space-12) 0;
-  margin-top: -var(--space-6);
-  position: relative;
-  z-index: 2;
-}
-
-/* Loading Section */
-.loading-section {
-  padding: var(--space-16) 0;
-  display: flex;
-  justify-content: center;
-}
-
-.loading-card {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-xl);
-  padding: var(--space-12);
-  text-align: center;
-  box-shadow: var(--shadow-lg);
-  max-width: 400px;
-  width: 100%;
-}
-
-.loading-spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid var(--gray-200);
-  border-top: 4px solid var(--primary-500);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto var(--space-6);
-}
-
-.loading-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-2);
-}
-
-.loading-text {
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Empty Section */
-.empty-section {
-  padding: var(--space-16) 0;
-  display: flex;
-  justify-content: center;
-}
-
-.empty-content {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-xl);
-  padding: var(--space-16);
-  text-align: center;
-  box-shadow: var(--shadow-lg);
-  max-width: 500px;
-  width: 100%;
-}
-
-.empty-icon {
-  width: 80px;
-  height: 80px;
-  color: var(--gray-400);
-  margin: 0 auto var(--space-8);
-}
-
-.empty-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.empty-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-4);
-}
-
-.empty-message {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-8);
-}
-
-/* Cart Layout */
-.cart-layout {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: var(--space-8);
-  align-items: start;
-}
-
-/* Cart Items */
-.cart-items {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-xl);
-  padding: var(--space-8);
-  box-shadow: var(--shadow);
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-8);
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--border);
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.item-count-badge {
-  background: var(--primary-100);
-  color: var(--primary-700);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-full);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.items-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.item-wrapper {
-  animation: slideUp 0.6s ease-out forwards;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-@keyframes slideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Order Summary */
-.order-summary {
-  position: sticky;
-  top: var(--space-8);
-}
-
-.summary-card {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-xl);
-  padding: var(--space-8);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border);
-}
-
-.summary-header {
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--border);
-}
-
-.summary-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.summary-content {
-  margin-bottom: var(--space-8);
-}
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-3) 0;
-}
-
-.summary-row.total {
-  font-weight: 600;
-  font-size: 1.125rem;
-  padding: var(--space-4) 0;
-}
-
-.summary-label {
-  color: var(--text-secondary);
-}
-
-.summary-row.total .summary-label {
-  color: var(--text-primary);
-}
-
-.summary-value {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.summary-value.free {
-  color: var(--success-600);
-  font-weight: 600;
-}
-
-.summary-row.total .summary-value {
-  color: var(--primary-600);
-  font-size: 1.25rem;
-}
-
-.summary-divider {
-  height: 1px;
-  background: var(--border);
-  margin: var(--space-4) 0;
-}
-
-.summary-actions {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.checkout-btn {
-  width: 100%;
-  justify-content: center;
-  font-weight: 600;
-}
-
-.continue-shopping {
-  text-align: center;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.continue-shopping:hover {
-  color: var(--primary-600);
-  background: var(--primary-50);
-}
-
-/* Animations */
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-@keyframes fadeIn {
+/* Enhanced fade-in animation for Tailwind */
+@keyframes fade-in-up {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -729,81 +401,13 @@ export default {
   }
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .cart-layout {
-    grid-template-columns: 1fr 350px;
-    gap: var(--space-6);
-  }
+.animate-fade-in {
+  animation: fade-in-up 0.6s ease-out forwards;
 }
 
-@media (max-width: 768px) {
-  .cart-header {
-    padding: var(--space-12) 0 var(--space-8);
-  }
-
-  .header-content {
-    flex-direction: column;
-    text-align: center;
-    gap: var(--space-4);
-  }
-
-  .header-icon {
-    width: 50px;
-    height: 50px;
-  }
-
-  .header-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .page-title {
-    font-size: 2rem;
-  }
-
-  .page-subtitle {
-    font-size: 1rem;
-  }
-
-  .cart-layout {
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-  }
-
-  .order-summary {
-    position: static;
-    order: -1;
-  }
-
-  .main-content {
-    padding: var(--space-8) 0;
-  }
-
-  .cart-items,
-  .summary-card {
-    padding: var(--space-6);
-  }
-}
-
-@media (max-width: 480px) {
-  .page-title {
-    font-size: 1.75rem;
-  }
-
-  .empty-content,
-  .loading-card {
-    padding: var(--space-8);
-  }
-
-  .empty-icon {
-    width: 60px;
-    height: 60px;
-  }
-
-  .cart-items,
-  .summary-card {
-    padding: var(--space-4);
-  }
+/* Staggered animation delays for cart items */
+[style*='animation-delay'] {
+  opacity: 0;
+  animation: fade-in-up 0.6s ease-out forwards;
 }
 </style>

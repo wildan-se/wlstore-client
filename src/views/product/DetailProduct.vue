@@ -1,101 +1,131 @@
 <template>
-  <div class="product-detail-page">
+  <div class="min-h-screen bg-base-200">
     <!-- Loading State -->
-    <div v-if="loading" class="loading-section">
-      <div class="loading-content">
-        <div class="loading-spinner"></div>
-        <h3 class="loading-title">Memuat Detail Produk</h3>
-        <p class="loading-text">Mohon tunggu sebentar...</p>
+    <div v-if="loading" class="min-h-screen flex items-center justify-center">
+      <div class="text-center">
+        <span
+          class="loading loading-spinner loading-lg text-primary mb-4"
+        ></span>
+        <h3 class="text-xl font-semibold mb-2">Memuat Detail Produk</h3>
+        <p class="text-base-content/70">Mohon tunggu sebentar...</p>
       </div>
     </div>
 
     <!-- Product Content -->
-    <div v-else-if="product" class="main-content">
-      <div class="container">
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb">
-          <router-link to="/" class="breadcrumb-link">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+    <div v-else-if="product" class="container mx-auto px-4 py-8">
+      <!-- Breadcrumb -->
+      <div class="breadcrumbs text-sm mb-8">
+        <ul>
+          <li>
+            <router-link
+              to="/"
+              class="flex items-center gap-2 hover:text-primary"
             >
-              <path
-                d="M3 9L12 2L21 9V20C21 20.6 20.6 21 20 21H4C3.4 21 3 20.6 3 20V9Z"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M9 22V12H15V22"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            Beranda
-          </router-link>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">{{ product.name }}</span>
-        </nav>
+              <svg
+                class="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 9L12 2L21 9V20C21 20.6 20.6 21 20 21H4C3.4 21 3 20.6 3 20V9Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 22V12H15V22"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Beranda
+            </router-link>
+          </li>
+          <li>
+            <span class="truncate max-w-xs">{{ product.name }}</span>
+          </li>
+        </ul>
+      </div>
 
-        <!-- Product Detail -->
-        <div class="product-detail animate-fade-in">
-          <div class="product-gallery">
-            <div class="main-image">
-              <img
-                :src="getFullImageUrl(product.imageUrl)"
-                :alt="product.name"
-                class="product-image"
-                loading="lazy"
-              />
-              <div class="image-badge" v-if="product.stock <= 5">
-                <span class="badge-text">Stok Terbatas</span>
-              </div>
+      <!-- Product Detail -->
+      <div class="card bg-base-100 shadow-xl animate-fade-in">
+        <div class="card-body p-0">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Product Gallery -->
+            <div class="relative">
+              <figure
+                class="aspect-square bg-base-200 rounded-2xl overflow-hidden relative"
+              >
+                <img
+                  :src="getFullImageUrl(product.imageUrl)"
+                  :alt="product.name"
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div
+                  v-if="product.stock <= 5"
+                  class="badge badge-warning absolute top-4 right-4"
+                >
+                  <span class="text-xs font-medium">Stok Terbatas</span>
+                </div>
+              </figure>
             </div>
-          </div>
 
-          <div class="product-info">
-            <div class="product-header">
-              <h1 class="product-title">{{ product.name }}</h1>
-              <div class="product-meta">
-                <div class="rating-section" v-if="product.averageRating">
-                  <div class="stars">
-                    <span
-                      v-for="star in 5"
-                      :key="star"
-                      :class="[
-                        'star',
-                        { filled: star <= Math.floor(product.averageRating) },
-                      ]"
-                    >
-                      ★
+            <!-- Product Info -->
+            <div class="p-8 space-y-6">
+              <!-- Product Header -->
+              <div class="space-y-4">
+                <h1 class="text-3xl font-bold text-base-content">
+                  {{ product.name }}
+                </h1>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div
+                    v-if="product.averageRating"
+                    class="flex items-center gap-2"
+                  >
+                    <div class="rating rating-sm">
+                      <span
+                        v-for="star in 5"
+                        :key="star"
+                        :class="[
+                          'mask mask-star-2',
+                          star <= Math.floor(product.averageRating)
+                            ? 'bg-orange-400'
+                            : 'bg-base-300',
+                        ]"
+                      ></span>
+                    </div>
+                    <span class="text-sm text-base-content/70">
+                      {{ product.averageRating.toFixed(1) }} dari 5
                     </span>
                   </div>
-                  <span class="rating-text"
-                    >{{ product.averageRating.toFixed(1) }} dari 5</span
-                  >
-                </div>
-                <div class="product-code">
-                  Kode: <span class="code-value">{{ product.code }}</span>
+                  <div class="text-sm text-base-content/70">
+                    Kode:
+                    <span class="font-mono font-medium">{{
+                      product.code
+                    }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="price-section">
-              <div class="price-main">
-                <span class="currency">Rp</span>
-                <span class="amount">{{
-                  parseFloat(product.price).toLocaleString('id-ID')
-                }}</span>
+              <!-- Price Section -->
+              <div class="bg-primary/10 p-4 rounded-2xl">
+                <div class="flex items-baseline gap-2">
+                  <span class="text-lg text-base-content/70">Rp</span>
+                  <span class="text-3xl font-bold text-primary">
+                    {{ parseFloat(product.price).toLocaleString('id-ID') }}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            <div class="stock-section">
-              <div class="stock-info">
+              <!-- Stock Section -->
+              <div class="flex items-center gap-3 p-4 bg-base-200 rounded-xl">
                 <svg
+                  class="w-5 h-5 text-base-content/70"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -107,58 +137,67 @@
                   />
                   <path d="M3 10H21" stroke="currentColor" stroke-width="2" />
                 </svg>
-                <span class="stock-text">
-                  <strong>{{ product.stock }}</strong> tersedia
+                <span class="text-base-content/70">
+                  <strong class="text-base-content">{{ product.stock }}</strong>
+                  tersedia
                 </span>
               </div>
-            </div>
 
-            <div class="description-section">
-              <h3 class="section-title">Deskripsi Produk</h3>
-              <p class="product-description">{{ product.description }}</p>
-            </div>
+              <!-- Description Section -->
+              <div class="divider"></div>
+              <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-base-content">
+                  Deskripsi Produk
+                </h3>
+                <p class="text-base-content/80 leading-relaxed">
+                  {{ product.description }}
+                </p>
+              </div>
 
-            <div class="action-section">
-              <button
-                class="btn btn-primary btn-lg add-to-cart-btn"
-                @click="addToCart(product.code)"
-                :disabled="product.stock === 0 || loading"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+              <!-- Action Section -->
+              <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                <button
+                  class="btn btn-primary btn-lg flex-1"
+                  @click="addToCart(product.code)"
+                  :disabled="product.stock === 0 || loading"
                 >
-                  <path
-                    d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <circle
-                    cx="9"
-                    cy="20"
-                    r="1"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
-                  <circle
-                    cx="20"
-                    cy="20"
-                    r="1"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
-                </svg>
-                {{
-                  loading
-                    ? 'Menambahkan...'
-                    : product.stock === 0
-                      ? 'Stok Habis'
-                      : 'Tambah ke Keranjang'
-                }}
-              </button>
+                  <svg
+                    class="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="9"
+                      cy="20"
+                      r="1"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    />
+                    <circle
+                      cx="20"
+                      cy="20"
+                      r="1"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    />
+                  </svg>
+                  {{
+                    loading
+                      ? 'Menambahkan...'
+                      : product.stock === 0
+                        ? 'Stok Habis'
+                        : 'Tambah ke Keranjang'
+                  }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -216,8 +255,8 @@ export default {
       }
 
       // Check authentication first
-      const authToken = localStorage.getItem('authToken')
-      if (!authToken) {
+      const token = localStorage.getItem('token')
+      if (!token) {
         this.showError('Silakan login terlebih dahulu')
         this.$router.push('/login')
         return
@@ -278,332 +317,6 @@ export default {
 </script>
 
 <style scoped>
-.product-detail-page {
-  min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    var(--gray-50) 0%,
-    var(--primary-50) 100%
-  );
-  padding: var(--space-8) 0;
-}
-
-/* Loading Section */
-.loading-section {
-  padding: var(--space-20) 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 60vh;
-}
-
-.loading-content {
-  text-align: center;
-  background: var(--surface-elevated);
-  padding: var(--space-12);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-}
-
-.loading-spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid var(--gray-200);
-  border-top: 4px solid var(--primary-500);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto var(--space-6);
-}
-
-.loading-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-2);
-}
-
-.loading-text {
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Main Content */
-.main-content {
-  padding: var(--space-8) 0;
-}
-
-/* Breadcrumb */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-8);
-  font-size: 0.875rem;
-}
-
-.breadcrumb-link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: color var(--transition);
-}
-
-.breadcrumb-link svg {
-  width: 16px;
-  height: 16px;
-}
-
-.breadcrumb-link:hover {
-  color: var(--primary-600);
-}
-
-.breadcrumb-separator {
-  color: var(--text-secondary);
-}
-
-.breadcrumb-current {
-  color: var(--text-primary);
-  font-weight: 500;
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Product Detail */
-.product-detail {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-12);
-  background: var(--surface-elevated);
-  border-radius: var(--radius-xl);
-  padding: var(--space-8);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Product Gallery */
-.product-gallery {
-  position: relative;
-}
-
-.main-image {
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: var(--gray-100);
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition);
-}
-
-.main-image:hover .product-image {
-  transform: scale(1.05);
-}
-
-.image-badge {
-  position: absolute;
-  top: var(--space-4);
-  left: var(--space-4);
-  background: var(--warning-500);
-  color: white;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Product Info */
-.product-info {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-}
-
-.product-header {
-  border-bottom: 1px solid var(--border);
-  padding-bottom: var(--space-6);
-}
-
-.product-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 var(--space-4);
-  line-height: 1.3;
-}
-
-.product-meta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.rating-section {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.stars {
-  display: flex;
-  gap: 2px;
-}
-
-.star {
-  color: var(--gray-300);
-  font-size: 1.125rem;
-  transition: color var(--transition);
-}
-
-.star.filled {
-  color: var(--warning-400);
-}
-
-.rating-text {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.product-code {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.code-value {
-  font-family: var(--font-mono);
-  background: var(--gray-100);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius);
-  color: var(--text-primary);
-}
-
-/* Price Section */
-.price-section {
-  padding: var(--space-6);
-  background: var(--primary-50);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--primary-200);
-}
-
-.price-main {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-}
-
-.currency {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--primary-600);
-}
-
-.amount {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--primary-700);
-  line-height: 1;
-}
-
-/* Stock Section */
-.stock-section {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.stock-info {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--success-600);
-}
-
-.stock-info svg {
-  width: 20px;
-  height: 20px;
-}
-
-.stock-text {
-  font-size: 0.875rem;
-}
-
-/* Description Section */
-.description-section {
-  border-top: 1px solid var(--border);
-  padding-top: var(--space-6);
-}
-
-.section-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 var(--space-4);
-}
-
-.product-description {
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin: 0;
-}
-
-/* Action Section */
-.action-section {
-  display: flex;
-  gap: var(--space-4);
-  margin-top: auto;
-}
-
-.add-to-cart-btn {
-  flex: 1;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.add-to-cart-btn:disabled {
-  background: var(--gray-300);
-  color: var(--gray-500);
-  border-color: var(--gray-300);
-  cursor: not-allowed;
-}
-
-.wishlist-btn {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.wishlist-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* Animations */
 .animate-fade-in {
   animation: fadeIn 0.6s ease-out forwards;
 }
@@ -616,85 +329,6 @@ export default {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .product-detail {
-    gap: var(--space-8);
-  }
-
-  .product-title {
-    font-size: 1.75rem;
-  }
-
-  .amount {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .product-detail-page {
-    padding: var(--space-4) 0;
-  }
-
-  .product-detail {
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-    padding: var(--space-6);
-  }
-
-  .breadcrumb-current {
-    max-width: 150px;
-  }
-
-  .product-title {
-    font-size: 1.5rem;
-  }
-
-  .currency {
-    font-size: 1.25rem;
-  }
-
-  .amount {
-    font-size: 1.75rem;
-  }
-
-  .action-section {
-    flex-direction: column;
-  }
-
-  .wishlist-btn {
-    width: 100%;
-    height: 48px;
-  }
-
-  .notification {
-    top: var(--space-4);
-    right: var(--space-4);
-    left: var(--space-4);
-    min-width: auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .product-detail {
-    padding: var(--space-4);
-  }
-
-  .product-title {
-    font-size: 1.25rem;
-  }
-
-  .amount {
-    font-size: 1.5rem;
-  }
-
-  .rating-section {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
   }
 }
 </style>

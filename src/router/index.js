@@ -6,7 +6,8 @@ import NotFound from '@/views/error/404Page.vue'
 import AdminProducts from '@/views/admin/AdminProducts.vue'
 import AdminDashboard from '@/views/admin/AdminDashboard.vue'
 import AdminOrders from '@/views/admin/AdminOrders.vue'
-import LoginPage from '@/views/auth/LoginPage.vue'
+import AuthPage from '@/views/auth/authPage.vue'
+import AdminLogin from '@/views/admin/AdminLogin.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,7 +31,19 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginPage,
+      component: AuthPage,
+      meta: { requiresGuest: true },
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: AuthPage,
+      meta: { requiresGuest: true },
+    },
+    {
+      path: '/admin/login',
+      name: 'admin-login',
+      component: AdminLogin,
       meta: { requiresGuest: true },
     },
     {
@@ -61,29 +74,66 @@ const router = createRouter({
 
 // Navigation Guard
 router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
   const userRole = localStorage.getItem('userRole')
-  const isAuthenticated = !!localStorage.getItem('authToken')
-  const isAdmin = userRole === 'admin'
+  const isAuthenticated = !!token
+  const isAdmin =
+    userRole === 'admin' ||
+    (user.roles &&
+      (user.roles.includes('admin') || user.roles.includes('ROLE_ADMIN')))
+
+  // Prevent admin users from accessing user login/register pages
+  if (
+    (to.name === 'login' || to.name === 'register') &&
+    isAuthenticated &&
+    isAdmin
+  ) {
+    next({ name: 'admin-products' })
+    return
+  }
+
+  // Prevent regular users from accessing admin routes
+  if (to.path.startsWith('/admin') && to.name !== 'admin-login') {
+    if (!isAuthenticated) {
+      next({ name: 'admin-login' })
+      return
+    }
+    if (!isAdmin) {
+      next({ name: 'index-product' })
+      return
+    }
+  }
 
   if (to.meta.requiresAuth && !isAuthenticated) {
-    // Jika rute butuh otentikasi tapi belum login, redirect ke halaman login
-    next({ name: 'login' })
+    // Jika rute butuh otentikasi tapi belum login
+    if (to.path.startsWith('/admin')) {
+      // Untuk rute admin, redirect ke admin login
+      next({ name: 'admin-login' })
+    } else {
+      // Untuk rute user, redirect ke user login
+      next({ name: 'login' })
+    }
   } else if (to.meta.requiresAdmin && !isAdmin) {
-    // Jika rute butuh admin role tapi bukan admin, redirect ke home
-    next({ name: 'index-product' })
+    // Jika rute butuh admin role tapi bukan admin, redirect ke admin login atau home
+    if (isAuthenticated) {
+      next({ name: 'index-product' })
+    } else {
+      next({ name: 'admin-login' })
+    }
   } else if (to.meta.requiresGuest && isAuthenticated) {
-    // Jika rute hanya untuk tamu (misal halaman login), tapi sudah login, redirect sesuai role
+    // Jika rute hanya untuk tamu tapi sudah login, redirect sesuai role
     if (isAdmin) {
-      next({ name: 'admin-dashboard' })
+      next({ name: 'admin-products' })
     } else {
       next({ name: 'index-product' })
     }
   } else if (isAdmin && to.name === 'index-product') {
     // Redirect admin dari halaman product ke dashboard
-    next({ name: 'admin-dashboard' })
+    next({ name: 'admin-products' })
   } else if (isAdmin && to.name === 'index-cart') {
     // Redirect admin dari halaman cart ke dashboard
-    next({ name: 'admin-dashboard' })
+    next({ name: 'admin-products' })
   } else {
     next() // Lanjutkan navigasi
   }

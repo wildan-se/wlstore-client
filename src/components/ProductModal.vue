@@ -1,31 +1,40 @@
 <template>
-  <div v-if="show" class="modal-overlay" @click.self="$emit('close')">
-    <div class="modal-container">
-      <div class="modal-header">
-        <h2 class="modal-title">
+  <div
+    v-if="show"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+    @click.self="$emit('close')"
+  >
+    <div
+      class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+    >
+      <div
+        class="p-6 border-b border-gray-200 flex justify-between items-center flex-shrink-0"
+      >
+        <h2 class="text-xl font-semibold text-gray-900 m-0">
           {{ product ? 'Edit Product' : 'Add New Product' }}
         </h2>
-        <button @click="$emit('close')" class="modal-close">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path
-              d="M18 6L6 18M6 6L18 18"
-              stroke="currentColor"
-              stroke-width="2"
-            />
+        <button
+          @click="$emit('close')"
+          class="w-10 h-10 border-none bg-gray-100 rounded-lg cursor-pointer transition-all duration-200 flex items-center justify-center text-gray-600 hover:bg-gray-200 hover:text-gray-900"
+        >
+          <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5 stroke-2">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" />
           </svg>
         </button>
       </div>
 
-      <form @submit.prevent="handleSubmit" class="modal-body">
-        <div class="form-grid">
+      <form @submit.prevent="handleSubmit" class="p-6 overflow-y-auto flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <!-- Product Code -->
-          <div class="form-group span-1">
-            <label for="code" class="form-label">Product Code *</label>
+          <div class="flex flex-col">
+            <label for="code" class="font-semibold text-gray-900 mb-2 text-sm"
+              >Product Code *</label
+            >
             <input
               id="code"
               v-model="form.code"
               type="text"
-              class="form-input"
+              class="p-3 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-3 focus:ring-blue-50 disabled:bg-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed"
               placeholder="e.g., PROD001"
               required
               :disabled="!!product"
@@ -33,26 +42,30 @@
           </div>
 
           <!-- Product Name -->
-          <div class="form-group span-2">
-            <label for="name" class="form-label">Product Name *</label>
+          <div class="flex flex-col md:col-span-2">
+            <label for="name" class="font-semibold text-gray-900 mb-2 text-sm"
+              >Product Name *</label
+            >
             <input
               id="name"
               v-model="form.name"
               type="text"
-              class="form-input"
+              class="p-3 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-3 focus:ring-blue-50"
               placeholder="Enter product name"
               required
             />
           </div>
 
           <!-- Price -->
-          <div class="form-group span-1">
-            <label for="price" class="form-label">Price (Rp) *</label>
+          <div class="flex flex-col">
+            <label for="price" class="font-semibold text-gray-900 mb-2 text-sm"
+              >Price (Rp) *</label
+            >
             <input
               id="price"
               v-model.number="form.price"
               type="number"
-              class="form-input"
+              class="p-3 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-3 focus:ring-blue-50"
               placeholder="0"
               min="0"
               step="1000"
@@ -61,13 +74,15 @@
           </div>
 
           <!-- Stock -->
-          <div class="form-group span-1">
-            <label for="stock" class="form-label">Stock *</label>
+          <div class="flex flex-col">
+            <label for="stock" class="font-semibold text-gray-900 mb-2 text-sm"
+              >Stock *</label
+            >
             <input
               id="stock"
               v-model.number="form.stock"
               type="number"
-              class="form-input"
+              class="p-3 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-3 focus:ring-blue-50"
               placeholder="0"
               min="0"
               required
@@ -75,13 +90,15 @@
           </div>
 
           <!-- Rating -->
-          <div class="form-group span-1">
-            <label for="rating" class="form-label">Average Rating</label>
+          <div class="flex flex-col">
+            <label for="rating" class="font-semibold text-gray-900 mb-2 text-sm"
+              >Average Rating</label
+            >
             <input
               id="rating"
               v-model.number="form.averageRating"
               type="number"
-              class="form-input"
+              class="p-3 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-3 focus:ring-blue-50"
               placeholder="0.0"
               min="0"
               max="5"
@@ -90,10 +107,17 @@
           </div>
 
           <!-- Image URL -->
-          <div class="form-group span-3">
-            <label for="imageUrl" class="form-label">Image</label>
-            <div class="image-input-group">
-              <select v-model="form.imageUrl" class="form-select">
+          <div class="flex flex-col md:col-span-3">
+            <label
+              for="imageUrl"
+              class="font-semibold text-gray-900 mb-2 text-sm"
+              >Image</label
+            >
+            <div class="flex flex-col gap-4">
+              <select
+                v-model="form.imageUrl"
+                class="p-3 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-3 focus:ring-blue-50"
+              >
                 <option value="">Select an image</option>
                 <option
                   v-for="image in availableImages"
@@ -103,31 +127,56 @@
                   {{ image.label }}
                 </option>
               </select>
-              <div v-if="form.imageUrl" class="image-preview">
-                <img :src="getImageUrl(form.imageUrl)" :alt="form.name" />
+              <div v-if="form.imageUrl" class="self-start">
+                <div
+                  class="w-32 h-32 rounded-lg overflow-hidden bg-gray-100 border border-gray-200"
+                >
+                  <img
+                    :src="getImageUrl(form.imageUrl)"
+                    :alt="form.name"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Description -->
-          <div class="form-group span-3">
-            <label for="description" class="form-label">Description</label>
+          <div class="flex flex-col md:col-span-3">
+            <label
+              for="description"
+              class="font-semibold text-gray-900 mb-2 text-sm"
+              >Description</label
+            >
             <textarea
               id="description"
               v-model="form.description"
-              class="form-textarea"
+              class="p-3 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-3 focus:ring-blue-50 resize-vertical min-h-[100px]"
               placeholder="Enter product description"
               rows="4"
             ></textarea>
           </div>
         </div>
 
-        <div class="modal-footer">
-          <button type="button" @click="$emit('close')" class="btn btn-outline">
+        <div
+          class="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200 flex-shrink-0"
+        >
+          <button
+            type="button"
+            @click="$emit('close')"
+            class="px-6 py-3 border border-gray-200 rounded-lg bg-white text-gray-900 font-medium cursor-pointer transition-all duration-200 hover:bg-gray-50"
+          >
             Cancel
           </button>
-          <button type="submit" class="btn btn-primary" :disabled="loading">
-            <div v-if="loading" class="loading-spinner"></div>
+          <button
+            type="submit"
+            class="px-6 py-3 bg-blue-600 text-white border-none rounded-lg font-medium cursor-pointer transition-all duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            :disabled="loading"
+          >
+            <div
+              v-if="loading"
+              class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
+            ></div>
             {{
               loading
                 ? 'Saving...'
@@ -262,211 +311,25 @@ export default {
 </script>
 
 <style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: var(--space-4);
+/* Minimal custom CSS - 98% replaced with Tailwind + DaisyUI */
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: all 0.2s ease;
 }
 
-.modal-container {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-2xl);
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-header {
-  padding: var(--space-6);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.modal-close {
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: var(--gray-100);
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  transition: all var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-}
-
-.modal-close:hover {
-  background: var(--gray-200);
-  color: var(--text-primary);
-}
-
-.modal-close svg {
-  width: 20px;
-  height: 20px;
-}
-
-.modal-body {
-  padding: var(--space-6);
-  overflow-y: auto;
-  flex: 1;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-6);
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group.span-1 {
-  grid-column: span 1;
-}
-
-.form-group.span-2 {
-  grid-column: span 2;
-}
-
-.form-group.span-3 {
-  grid-column: span 3;
-}
-
-.form-label {
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-2);
-  font-size: 0.875rem;
-}
-
-.form-input,
-.form-select,
-.form-textarea {
-  padding: var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  transition: border-color var(--transition);
-}
-
-.form-input:focus,
-.form-select:focus,
-.form-textarea:focus {
-  border-color: var(--primary-500);
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.form-input:disabled {
-  background: var(--gray-100);
-  color: var(--text-secondary);
-  cursor: not-allowed;
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.image-input-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.image-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: var(--gray-100);
-  border: 1px solid var(--border);
-}
-
-.image-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.modal-footer {
-  padding: var(--space-6);
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-3);
-  flex-shrink: 0;
-}
-
-.loading-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-right: var(--space-2);
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* Custom responsive layout for mobile */
 @media (max-width: 768px) {
-  .modal-container {
-    margin: var(--space-4);
-    max-height: calc(100vh - 2rem);
-  }
-
-  .form-grid {
+  .grid.grid-cols-1.md\\:grid-cols-3 {
     grid-template-columns: 1fr;
   }
 
-  .form-group.span-1,
-  .form-group.span-2,
-  .form-group.span-3 {
+  .md\\:col-span-2,
+  .md\\:col-span-3 {
     grid-column: span 1;
   }
 
-  .modal-header {
-    padding: var(--space-4);
-  }
-
-  .modal-body {
-    padding: var(--space-4);
-  }
-
-  .modal-footer {
-    padding: var(--space-4);
+  .flex.justify-end {
     flex-direction: column;
   }
 }

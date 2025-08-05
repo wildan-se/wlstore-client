@@ -1,32 +1,127 @@
 <template>
-  <div class="not-found-container">
-    <div class="background">
+  <div
+    class="min-h-screen bg-gradient-to-br from-base-300 via-base-200 to-primary/20 flex items-center justify-center p-4 relative overflow-hidden"
+  >
+    <!-- Background Animation -->
+    <div class="absolute inset-0 overflow-hidden">
       <div
-        v-for="n in 50"
+        v-for="n in 20"
         :key="n"
-        class="circle-container"
-        :style="circleStyle(n)"
-      >
-        <div class="circle"></div>
-      </div>
+        class="absolute animate-pulse"
+        :class="['w-2 h-2 bg-primary/20 rounded-full', 'animate-float']"
+        :style="particleStyle(n)"
+      ></div>
     </div>
-    <div class="particles" ref="particles"></div>
+
+    <!-- Floating Geometric Shapes -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div
+        v-for="n in 8"
+        :key="`shape-${n}`"
+        class="absolute animate-spin opacity-10"
+        :class="[
+          n % 3 === 0
+            ? 'w-20 h-20 bg-secondary'
+            : n % 3 === 1
+              ? 'w-16 h-16 bg-accent'
+              : 'w-12 h-12 bg-primary',
+          n % 2 === 0 ? 'rounded-full' : 'rounded-lg rotate-45',
+        ]"
+        :style="shapeStyle(n)"
+      ></div>
+    </div>
+
+    <!-- Main Content Card -->
     <div
-      class="card"
+      class="card bg-base-100/80 backdrop-blur-lg border border-base-300/50 shadow-2xl w-full max-w-lg relative z-10 transform transition-all duration-500 hover:scale-105"
       ref="card"
       @mousemove="handleMouseMove"
       @mouseleave="handleMouseLeave"
     >
-      <div class="card-content" ref="cardContent">
-        <div class="error-code">404</div>
-        <h1 class="error-title">Page Not Found</h1>
-        <p class="error-message">
-          Oops! The page you are looking for might have been removed, had its
-          name changed, or is temporarily unavailable.
-        </p>
-        <router-link to="/" class="home-button">Back to Home</router-link>
+      <div class="card-body text-center p-12" ref="cardContent">
+        <!-- 404 Code with Gradient -->
+        <div class="mb-6">
+          <div
+            class="text-8xl md:text-9xl font-black bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-pulse select-none"
+          >
+            404
+          </div>
+          <div class="flex justify-center mt-4">
+            <div
+              class="w-24 h-1 bg-gradient-to-r from-primary to-secondary rounded-full"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="space-y-4 mb-8">
+          <h1 class="text-3xl font-bold text-base-content">
+            Halaman Tidak Ditemukan
+          </h1>
+          <p class="text-base-content/70 text-lg leading-relaxed">
+            Ups! Halaman yang Anda cari mungkin telah dipindahkan, dihapus, atau
+            tidak tersedia sementara.
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <router-link to="/" class="btn btn-primary btn-lg">
+            <svg
+              class="w-5 h-5 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Kembali ke Beranda
+          </router-link>
+          <button @click="$router.go(-1)" class="btn btn-outline btn-lg">
+            <svg
+              class="w-5 h-5 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 12H5M12 19L5 12L12 5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Halaman Sebelumnya
+          </button>
+        </div>
+
+        <!-- Fun Stats -->
+        <div
+          class="stats stats-vertical sm:stats-horizontal bg-base-200/50 mt-8 border border-base-300/50"
+        >
+          <div class="stat">
+            <div class="stat-title text-xs">Status Code</div>
+            <div class="stat-value text-error text-2xl">404</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title text-xs">Error Type</div>
+            <div class="stat-value text-warning text-base">Not Found</div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Bottom Decoration -->
+    <div
+      class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-base-300/50 to-transparent pointer-events-none"
+    ></div>
   </div>
 </template>
 
@@ -34,32 +129,9 @@
 export default {
   name: 'NotFound',
   mounted() {
-    this.createParticles()
-    // Memastikan background full layar
-    document.body.style.margin = '0'
-    document.body.style.overflow = 'hidden'
-    document.documentElement.style.height = '100%'
-    document.body.style.height = '100%'
-  },
-  unmounted() {
-    // Membersihkan style ketika komponen unmount
-    document.body.style.margin = ''
-    document.body.style.overflow = ''
-    document.documentElement.style.height = ''
-    document.body.style.height = ''
+    // Tidak perlu manipulasi DOM untuk background karena sudah menggunakan Tailwind
   },
   methods: {
-    createParticles() {
-      const particlesContainer = this.$refs.particles
-      for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div')
-        particle.className = 'particle'
-        particle.style.left = `${Math.random() * 100}%`
-        particle.style.top = `${Math.random() * 100}%`
-        particle.style.animationDelay = `${Math.random() * 4}s`
-        particlesContainer.appendChild(particle)
-      }
-    },
     handleMouseMove(e) {
       const card = this.$refs.card
       const cardContent = this.$refs.cardContent
@@ -84,20 +156,34 @@ export default {
       card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)'
       cardContent.style.transform = 'translateZ(0)'
     },
-    // Dynamically generate styles for each circle
-    circleStyle(n) {
-      // Use 'n' to seed the random values for consistent and unique styles
+    // Generate particle positions
+    particleStyle(n) {
       function seededRandom(seed) {
         var x = Math.sin(seed) * 10000
         return x - Math.floor(x)
       }
-      const duration = 15 + seededRandom(n) * 10 // 15s to 25s
-      const delay = -seededRandom(n + 100) * 30 // -30s to 0s
-      const left = seededRandom(n + 200) * 100 // 0% to 100%
+      const left = seededRandom(n) * 100
+      const top = seededRandom(n + 100) * 100
+      const delay = seededRandom(n + 200) * 4
       return {
-        left: `${left}vw`,
-        animationDuration: `${duration}s`,
+        left: `${left}%`,
+        top: `${top}%`,
         animationDelay: `${delay}s`,
+      }
+    },
+    // Generate shape positions and sizes
+    shapeStyle(n) {
+      function seededRandom(seed) {
+        var x = Math.sin(seed) * 10000
+        return x - Math.floor(x)
+      }
+      const left = seededRandom(n) * 100
+      const top = seededRandom(n + 50) * 100
+      const duration = 8 + seededRandom(n + 100) * 12
+      return {
+        left: `${left}%`,
+        top: `${top}%`,
+        animationDuration: `${duration}s`,
       }
     },
   },
@@ -105,182 +191,37 @@ export default {
 </script>
 
 <style scoped>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
-
-.not-found-container {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #1a1a1a;
-  overflow: hidden;
-  font-family: 'Arial', sans-serif;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-.background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.circle-container {
-  position: absolute;
-  transform: translateY(0);
-  animation: fall linear infinite;
-}
-
-.circle {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(108, 99, 255, 0.2);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-/* No need for repetitive nth-child rules if using dynamic styles */
-
-@keyframes fall {
-  0% {
-    transform: translateY(-20vh) translateX(0);
-  }
-  50% {
-    transform: translateX(20px);
-  }
-  100% {
-    transform: translateY(120vh) translateX(0);
-  }
-}
-
-@keyframes pulse {
+@keyframes animate-float {
   0%,
   100% {
-    transform: scale(1);
-    opacity: 0.2;
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.5;
   }
   50% {
-    transform: scale(1.5);
-    opacity: 0.4;
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 1;
   }
 }
 
-.particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+.animate-float {
+  animation: animate-float 6s ease-in-out infinite;
 }
 
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  animation: float 4s infinite;
-}
-
-@keyframes float {
+/* Custom keyframes for more complex animations */
+@keyframes float-up {
   0% {
-    transform: translateY(0) translateX(0);
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
     opacity: 1;
   }
   100% {
-    transform: translateY(-100vh) translateX(100px);
+    transform: translateY(-20vh) scale(1);
     opacity: 0;
-  }
-}
-
-.card {
-  position: relative;
-  z-index: 2;
-  width: 400px;
-  height: 500px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  padding: 40px;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  transition: transform 0.5s ease;
-  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
-}
-
-.card:hover {
-  transform: scale(1.02);
-}
-
-.card-content {
-  text-align: center;
-  transform: translateZ(60px);
-  transition: transform 0.5s ease;
-}
-
-.error-code {
-  font-size: 120px;
-  color: #6c63ff;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 10px rgba(108, 99, 255, 0.5);
-}
-
-.error-title {
-  font-size: 24px;
-  color: #fff;
-  margin-bottom: 20px;
-}
-
-.error-message {
-  color: #ccc;
-  margin-bottom: 30px;
-  line-height: 1.6;
-}
-
-.home-button {
-  display: inline-block;
-  padding: 12px 30px;
-  background: #6c63ff;
-  color: white;
-  text-decoration: none;
-  border-radius: 25px;
-  font-weight: bold;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.home-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
-}
-
-@media (max-width: 480px) {
-  .card {
-    width: 90%;
-    height: auto;
-    padding: 30px;
-  }
-
-  .error-code {
-    font-size: 80px;
   }
 }
 </style>
