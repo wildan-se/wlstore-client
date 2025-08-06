@@ -37,69 +37,237 @@
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-16 -mt-8 relative z-20">
       <!-- Filters and Search -->
-      <div class="card bg-base-100 shadow-xl mb-12">
-        <div class="card-body">
-          <div class="flex flex-col lg:flex-row gap-6 items-center">
+      <div
+        class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 mb-12 overflow-hidden"
+      >
+        <div class="p-6 lg:p-8">
+          <!-- Header -->
+          <div class="mb-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-2">
+              Cari & Filter Produk
+            </h2>
+            <p class="text-gray-600 text-sm">
+              Temukan produk yang Anda inginkan dengan mudah
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
             <!-- Search Section -->
-            <div class="flex-1 w-full max-w-md">
-              <div class="form-control">
-                <div class="input-group">
-                  <span class="bg-base-200">
+            <div class="lg:col-span-5">
+              <label class="block text-sm font-semibold text-gray-700 mb-3">
+                <div class="flex items-center gap-2">
+                  <svg
+                    class="w-4 h-4 text-blue-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                    />
+                  </svg>
+                  Pencarian Produk
+                </div>
+              </label>
+              <div class="relative group">
+                <div
+                  class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-400 group-focus-within:text-blue-600 transition-colors"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  placeholder="Cari nama produk, deskripsi..."
+                  class="w-full pl-12 pr-4 py-3.5 text-gray-900 bg-gray-50 border border-gray-300 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 placeholder-gray-500"
+                  @input="handleSearch"
+                />
+                <div
+                  v-if="searchQuery"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <button
+                    @click="searchQuery = ''"
+                    class="p-1 rounded-full hover:bg-gray-200 transition-colors"
+                  >
                     <svg
-                      class="w-5 h-5"
+                      class="w-4 h-4 text-gray-400"
                       viewBox="0 0 24 24"
-                      fill="currentColor"
+                      fill="none"
                     >
                       <path
-                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                        d="M18 6L6 18M6 6L18 18"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
                       />
                     </svg>
-                  </span>
-                  <input
-                    v-model="searchQuery"
-                    type="text"
-                    placeholder="Search products..."
-                    class="input input-bordered w-full"
-                    @input="handleSearch"
-                  />
+                  </button>
                 </div>
               </div>
             </div>
 
-            <!-- Filter Section -->
-            <div class="flex items-center gap-4 w-full lg:w-auto">
-              <select
-                v-model="sortBy"
-                @change="handleSort"
-                class="select select-bordered w-full max-w-xs"
-              >
-                <option value="">Sort by</option>
-                <option value="name">Name</option>
-                <option value="price">Price: Low to High</option>
-                <option value="-price">Price: High to Low</option>
-                <option value="-averageRating">Rating</option>
-              </select>
-
-              <div class="btn-group">
-                <button
-                  :class="['btn', viewMode === 'grid' ? 'btn-active' : '']"
-                  @click="viewMode = 'grid'"
+            <!-- Sort Filter -->
+            <div class="lg:col-span-4">
+              <label class="block text-sm font-semibold text-gray-700 mb-3">
+                <div class="flex items-center gap-2">
+                  <svg
+                    class="w-4 h-4 text-blue-600"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M3 6H21"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M7 12H17"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M10 18H14"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Urutkan Berdasarkan
+                </div>
+              </label>
+              <div class="relative">
+                <select
+                  v-model="sortBy"
+                  @change="handleSort"
+                  class="w-full px-4 py-3.5 text-gray-900 bg-gray-50 border border-gray-300 rounded-2xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
                 >
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <option value="">Pilih urutan</option>
+                  <option value="name">Nama A-Z</option>
+                  <option value="price">Harga Terendah</option>
+                  <option value="-price">Harga Tertinggi</option>
+                  <option value="-averageRating">Rating Tertinggi</option>
+                </select>
+                <div
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M8 10L12 14L16 10"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- View Mode Toggle -->
+            <div class="lg:col-span-3">
+              <label class="block text-sm font-semibold text-gray-700 mb-3">
+                <div class="flex items-center gap-2">
+                  <svg
+                    class="w-4 h-4 text-blue-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
                     <path
                       d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"
                     />
                   </svg>
+                  Tampilan
+                </div>
+              </label>
+              <div class="flex rounded-2xl bg-gray-100 p-1 space-x-1">
+                <button
+                  :class="[
+                    'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300',
+                    viewMode === 'grid'
+                      ? 'bg-white text-blue-600 shadow-lg shadow-blue-500/20'
+                      : 'text-gray-600 hover:text-gray-900',
+                  ]"
+                  @click="viewMode = 'grid'"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"
+                    />
+                  </svg>
+                  Grid
                 </button>
                 <button
-                  :class="['btn', viewMode === 'list' ? 'btn-active' : '']"
+                  :class="[
+                    'flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300',
+                    viewMode === 'list'
+                      ? 'bg-white text-blue-600 shadow-lg shadow-blue-500/20'
+                      : 'text-gray-600 hover:text-gray-900',
+                  ]"
                   @click="viewMode = 'list'"
                 >
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                     <path
                       d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
                     />
                   </svg>
+                  List
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results Summary -->
+          <div v-if="!loading" class="mt-6 pt-6 border-t border-gray-200">
+            <div class="flex items-center justify-between text-sm">
+              <div class="flex items-center gap-4">
+                <span class="text-gray-600">
+                  Menampilkan
+                  <span class="font-semibold text-gray-900">{{
+                    filteredProducts.length
+                  }}</span>
+                  dari
+                  <span class="font-semibold text-gray-900">{{
+                    products.length
+                  }}</span>
+                  produk
+                </span>
+                <div v-if="searchQuery" class="flex items-center gap-2">
+                  <span class="text-gray-500">untuk</span>
+                  <span
+                    class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-medium"
+                  >
+                    "{{ searchQuery }}"
+                  </span>
+                </div>
+              </div>
+              <div v-if="searchQuery || sortBy" class="flex items-center gap-2">
+                <button
+                  @click="clearFilters"
+                  class="flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M18 6L6 18M6 6L18 18"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Reset Filter
                 </button>
               </div>
             </div>
@@ -292,6 +460,11 @@ export default {
       // Event received for potential future use (analytics, etc.)
     }
 
+    const clearFilters = () => {
+      searchQuery.value = ''
+      sortBy.value = ''
+    }
+
     onMounted(() => {
       fetchProducts()
     })
@@ -308,6 +481,7 @@ export default {
       handleSearch,
       handleSort,
       handleProductAdded,
+      clearFilters,
     }
   },
 }

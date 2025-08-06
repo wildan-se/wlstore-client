@@ -6,7 +6,8 @@ import NotFound from '@/views/error/404Page.vue'
 import AdminProducts from '@/views/admin/AdminProducts.vue'
 import AdminDashboard from '@/views/admin/AdminDashboard.vue'
 import AdminOrders from '@/views/admin/AdminOrders.vue'
-import AuthPage from '@/views/auth/authPage.vue'
+import LoginPage from '@/views/auth/LoginPage.vue'
+import RegisterPage from '@/views/auth/RegisterPage.vue'
 import AdminLogin from '@/views/admin/AdminLogin.vue'
 
 const router = createRouter({
@@ -31,13 +32,13 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: AuthPage,
+      component: LoginPage,
       meta: { requiresGuest: true },
     },
     {
       path: '/register',
       name: 'register',
-      component: AuthPage,
+      component: RegisterPage,
       meta: { requiresGuest: true },
     },
     {

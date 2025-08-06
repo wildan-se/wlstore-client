@@ -1,5 +1,6 @@
 <template>
   <NavbarApp
+    v-if="!isAdminRoute"
     :isLoggedIn="isLoggedIn"
     :isAdmin="isAdmin"
     :cartItemCount="cartItemCount"
@@ -12,58 +13,89 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import NavbarApp from './components/NavbarApp.vue'
 import NotificationContainer from './components/NotificationContainer.vue'
-import AuthService from '@/services/auth.service'
+import { useAuth } from './composables/useAuth.js'
+import { useCart } from './composables/useCart.js'
 
-export default defineComponent({
+export default {
+  name: 'App',
   components: {
     NavbarApp,
     NotificationContainer,
   },
-  data() {
+  setup() {
+    const route = useRoute()
+    const {
+      logout,
+      isAuthenticated,
+      isAdmin: checkIsAdmin,
+      getCurrentUser,
+    } = useAuth()
+    const { cartItemCount, loadCart } = useCart()
+
+    // Reactive state
+    const isLoggedIn = ref(false)
+    const isAdmin = ref(false)
+    const userName = ref('User')
+    const userRole = ref('Customer')
+
+    // Check if current route is an admin route
+    const isAdminRoute = computed(() => {
+      return route.path.startsWith('/admin')
+    })
+
+    const checkAuthStatus = () => {
+      isLoggedIn.value = isAuthenticated()
+      isAdmin.value = checkIsAdmin()
+
+      if (isLoggedIn.value) {
+        const user = getCurrentUser()
+        userName.value = user?.name || user?.username || 'User'
+        userRole.value = isAdmin.value ? 'Admin' : 'Customer'
+      } else {
+        userName.value = 'User'
+        userRole.value = 'Customer'
+      }
+    }
+
+    const handleAuthSuccess = () => {
+      checkAuthStatus()
+    }
+
+    const handleLogout = () => {
+      logout()
+      isLoggedIn.value = false
+      isAdmin.value = false
+      userName.value = 'User'
+      userRole.value = 'Customer'
+    }
+
+    // Watch route changes
+    watch(route, () => {
+      checkAuthStatus()
+    })
+
+    // Check auth status and load cart on mount
+    onMounted(() => {
+      checkAuthStatus()
+      loadCart()
+    })
+
     return {
-      isLoggedIn: false,
-      isAdmin: false,
-      cartItemCount: 0,
-      userName: 'User',
-      userRole: 'Customer',
+      isLoggedIn,
+      isAdmin,
+      cartItemCount,
+      userName,
+      userRole,
+      isAdminRoute,
+      handleAuthSuccess,
+      handleLogout,
     }
   },
-  created() {
-    this.checkAuthStatus()
-  },
-  methods: {
-    checkAuthStatus() {
-      this.isLoggedIn = AuthService.isLoggedIn()
-      this.isAdmin = AuthService.isAdmin()
-
-      if (this.isLoggedIn) {
-        const user = AuthService.getCurrentUser()
-        this.userName = user.name || user.username || 'User'
-        this.userRole = this.isAdmin ? 'Admin' : 'Customer'
-      } else {
-        this.userName = 'User'
-        this.userRole = 'Customer'
-      }
-    },
-    handleAuthSuccess() {
-      this.checkAuthStatus()
-    },
-    handleLogout() {
-      AuthService.logout()
-      this.isLoggedIn = false
-      this.isAdmin = false
-      this.userName = 'User'
-      this.userRole = 'Customer'
-      this.$router.push({ name: 'login' })
-    },
-  },
-  watch: {
-    $route: 'checkAuthStatus',
-  },
-})
+}
 </script>
 
 <style>

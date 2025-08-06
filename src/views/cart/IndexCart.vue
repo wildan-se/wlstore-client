@@ -159,7 +159,7 @@
 
         <!-- Order Summary -->
         <div class="xl:col-span-1">
-          <div class="sticky top-4">
+          <div class="sticky top-14 pt-6 mt-6">
             <div class="card bg-base-100 shadow-xl">
               <div class="card-body">
                 <h3 class="text-xl font-bold mb-6">Ringkasan Pesanan</h3>
